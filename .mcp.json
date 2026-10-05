@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "deploy-report": {
+      "type": "http",
+      "url": "https://registry.deploy.report/mcp"
+    }
+  }
+}

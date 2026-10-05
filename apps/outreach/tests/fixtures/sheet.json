@@ -1,0 +1,171 @@
+[
+  {
+    "row": 2,
+    "cells": {
+      "A2": "Corewell GPU",
+      "B2": "Sam Rivera",
+      "C2": "Not applied",
+      "D2": "https://corewell.example/news",
+      "E2": "Yes",
+      "F2": "Presenting",
+      "G2": "United States",
+      "H2": "Akshit"
+    }
+  },
+  {
+    "row": 3,
+    "cells": {
+      "A3": "Lumen Compute",
+      "B3": "Noor Haddad",
+      "C3": "Not applied",
+      "D3": "https://lumen.example/news",
+      "E3": "No",
+      "F3": "Contacted",
+      "G3": "United States",
+      "H3": "Akshit"
+    }
+  },
+  {
+    "row": 4,
+    "cells": {
+      "A4": "Cascade Cloud",
+      "B4": "Jordan Blake",
+      "C4": "Not applied",
+      "D4": "https://cascadecloud.example/news",
+      "E4": "No",
+      "F4": "Meeting schedule 07/09/2026",
+      "G4": "United States",
+      "H4": "Chinmay"
+    }
+  },
+  {
+    "row": 5,
+    "cells": {
+      "A5": "Ion Harbor",
+      "B5": "Mira Stone",
+      "C5": "",
+      "D5": "https://ionharbor.example/news",
+      "E5": "No",
+      "F5": "",
+      "G5": "Canada",
+      "H5": "Akshit"
+    }
+  },
+  {
+    "row": 6,
+    "cells": {
+      "A6": "Podline",
+      "B6": "Theo Park",
+      "C6": "Not applied",
+      "D6": "https://podline.example/news",
+      "E6": "No",
+      "F6": "Prospecting",
+      "G6": "United States",
+      "H6": "Akshit"
+    }
+  },
+  {
+    "row": 7,
+    "cells": {
+      "A7": "Hive HPC",
+      "B7": "Pat Quinn",
+      "C7": "NA",
+      "D7": "https://hivehpc.example/news",
+      "E7": "No",
+      "F7": "Contacted + Applied",
+      "G7": "United States",
+      "H7": "Chinmay"
+    }
+  },
+  {
+    "row": 8,
+    "cells": {
+      "A8": "Nebula Racks",
+      "B8": "Arno Jansen",
+      "C8": "Not applied",
+      "D8": "https://nebularacks.example/news",
+      "E8": "No",
+      "F8": "Prospecting",
+      "G8": "Netherlands",
+      "H8": "Chinmay"
+    }
+  },
+  {
+    "row": 9,
+    "cells": {
+      "A9": "Meridian Metal",
+      "B9": "Lee Morgan",
+      "C9": "Not applied",
+      "D9": "https://meridianmetal.example/news",
+      "E9": "No",
+      "F9": "Prospecting",
+      "G9": "Germany",
+      "H9": "Chinmay"
+    }
+  },
+  {
+    "row": 10,
+    "cells": {
+      "A10": "Orbit AI",
+      "B10": "Kenji Mori",
+      "C10": "Applied",
+      "D10": "https://orbitdata.example/news",
+      "E10": "No",
+      "F10": "Contacted",
+      "G10": "India",
+      "H10": "Chinmay"
+    }
+  },
+  {
+    "row": 11,
+    "cells": {
+      "A11": "Nimbus Grid",
+      "B11": "Rhea Kim",
+      "C11": "",
+      "D11": "https://nimbusgrid.example/news",
+      "E11": "No",
+      "F11": "",
+      "G11": "India",
+      "H11": "Akshit"
+    }
+  },
+  {
+    "row": 12,
+    "cells": {
+      "A12": "Kumo Internet",
+      "B12": "Aiko Tanaka",
+      "C12": "",
+      "D12": "https://kumo-fixture.ad.jp/news",
+      "E12": "No",
+      "F12": "",
+      "G12": "Japan",
+      "H12": "Akshit"
+    }
+  },
+  {
+    "row": 13,
+    "cells": {
+      "A13": "Lantern IDC",
+      "B13": "Minh Tran",
+      "C13": "",
+      "D13": "https://lanternidc-fixture.com.vn/news",
+      "E13": "No",
+      "F13": "",
+      "G13": "Vietnam",
+      "H13": "Akshit"
+    }
+  },
+  {
+    "row": 14,
+    "cells": {
+      "A14": "Tui Solutions",
+      "B14": "Hana Walker",
+      "C14": "",
+      "D14": "https://tui-fixture.co.nz/news",
+      "E14": "No",
+      "F14": "Prospecting",
+      "G14": "New Zealand",
+      "H14": "Chinmay"
+    }
+  }
+]

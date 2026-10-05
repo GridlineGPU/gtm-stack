@@ -1,0 +1,998 @@
+{
+  "id": "gridline-demand",
+  "name": "Gridline demand funnel",
+  "side": "demand",
+  "version": "2026-10-03 (Stage 1 v5: edtech pilot offer)",
+  "entry": "prospect",
+  "segments": [
+    {
+      "id": "orchestrator",
+      "label": "Voice orchestrators (platforms others build voice agents on)",
+      "match": {
+        "category": [
+          "voice",
+          "voice_video",
+          "both"
+        ],
+        "own_models": [
+          "orchestrator"
+        ]
+      }
+    },
+    {
+      "id": "audio",
+      "label": "Audio model companies (ASR, TTS, voice agents)",
+      "match": {
+        "category": [
+          "voice",
+          "voice_video",
+          "both"
+        ]
+      }
+    },
+    {
+      "id": "non_audio",
+      "label": "Document, retrieval and web-data companies",
+      "match": {
+        "category": [
+          "document",
+          "retrieval",
+          "web_data"
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "prospect",
+      "label": "Prospect",
+      "kind": "stage",
+      "goal": "A researched person with a reason to talk: company, model, hosting, hook, source.",
+      "messages": [
+        {
+          "id": "connection_note",
+          "label": "Connection note (300 chars max)",
+          "text": "Hi {First}, I'm Chinmay, founder of Gridline (EF F26). We benchmark {workload} models across GPU types and route each workload to the cheapest hardware that meets its latency bar. {Company} looks like a strong fit. Let's connect."
+        },
+        {
+          "id": "inmail",
+          "label": "InMail (when no connection slot)",
+          "text": "Hi {First}, I'm Chinmay, founder of Gridline (EF F26). We benchmark models across GPU types and providers, then route each workload to the cheapest hardware that still meets its latency and throughput bar, on your own provider accounts.\n\nI'm speaking with teams running {class} in production to understand how they pick GPUs today. Would you be open to a quick chat this week?"
+        }
+      ],
+      "exits": [
+        {
+          "id": "request_sent",
+          "to": "requested",
+          "kind": "advance",
+          "when": "Connection request or InMail sent"
+        },
+        {
+          "id": "park",
+          "to": "parked",
+          "kind": "disqualify",
+          "when": "Not now: wrong timing, no contact route, or a colleague is already being worked"
+        },
+        {
+          "id": "prospect_stale",
+          "to": "parked",
+          "kind": "timeout",
+          "after_days": 30,
+          "when": "Researched but never contacted"
+        }
+      ]
+    },
+    {
+      "id": "parked",
+      "label": "Parked before contact",
+      "kind": "nurture",
+      "goal": "Keep the research; come back when timing or a route changes.",
+      "messages": [],
+      "exits": [
+        {
+          "id": "unpark",
+          "to": "prospect",
+          "kind": "reengage",
+          "when": "A route opened (mutual, event, colleague replied) or timing changed"
+        }
+      ]
+    },
+    {
+      "id": "requested",
+      "label": "Request sent",
+      "kind": "stage",
+      "goal": "They accept the connection or reply to the InMail.",
+      "messages": [],
+      "exits": [
+        {
+          "id": "accepted",
+          "to": "connected",
+          "kind": "advance",
+          "when": "Connection accepted, or InMail replied"
+        },
+        {
+          "id": "no_accept",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 21,
+          "when": "Request still pending after three weeks"
+        }
+      ]
+    },
+    {
+      "id": "connected",
+      "label": "Stage 0: Connected",
+      "kind": "stage",
+      "goal": "Send the Stage 1 message that fits their segment.",
+      "messages": [
+        {
+          "id": "stage1_pilot",
+          "label": "Stage 1: transcription pilot results offer",
+          "segments": [
+            "audio"
+          ],
+          "text": "Thanks for connecting, {First}. I'm building Gridline, a GPU infrastructure layer, and have been looking at the economics of transcription workloads, particularly which workloads actually need expensive GPU capacity versus which can run on cheaper available hardware.\n\nWe ran a small pilot with an edtech company and found some pretty significant cost differences while maintaining the same output quality. Happy to send over the results if useful.\n\nI'm curious about {Company's} workload mix: is transcription mostly live audio for you, or do you also have a meaningful amount of recorded/batch audio?"
+        },
+        {
+          "id": "stage1_pilot_orchestrator",
+          "label": "Stage 1: pilot offer, orchestrator wording",
+          "segments": [
+            "orchestrator"
+          ],
+          "text": "Thanks for connecting, {First}. I'm building Gridline, a GPU infrastructure layer, and have been looking at the economics of transcription workloads, particularly which workloads actually need expensive GPU capacity versus which can run on cheaper available hardware.\n\nWe ran a small pilot with an edtech company and found some pretty significant cost differences while maintaining the same output quality. Happy to send over the results if useful.\n\nI'm curious about the workload mix on {Company}: is transcription for the teams building on it mostly live audio, or is there also a meaningful amount of recorded/batch audio?"
+        },
+        {
+          "id": "stage1_chat",
+          "label": "Stage 1: research chat ask (no pilot fits this segment yet)",
+          "segments": [
+            "non_audio"
+          ],
+          "text": "Hey {First}, thanks for connecting!\n\nI'm building in the GPU infrastructure space and speaking with teams running {class} in production to understand the challenges they face around GPU capacity, latency, and cost.\n\nWould love to hear your perspective. Would you be open to a quick 15-minute chat over Google Meet sometime in the next few days?\n\nHappy to work around your schedule & share what I have learned so far."
+        }
+      ],
+      "do_not_claim": [
+        "Send the pilot message only if the edtech pilot is true."
+      ],
+      "exits": [
+        {
+          "id": "offer_sent",
+          "to": "offered",
+          "kind": "advance",
+          "when": "Stage 1 pilot offer sent",
+          "segments": [
+            "audio",
+            "orchestrator"
+          ]
+        },
+        {
+          "id": "chat_ask_sent",
+          "to": "chat_asked",
+          "kind": "advance",
+          "when": "Research chat ask sent",
+          "segments": [
+            "non_audio"
+          ]
+        },
+        {
+          "id": "never_messaged",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 14,
+          "when": "Connected but no Stage 1 message went out"
+        }
+      ]
+    },
+    {
+      "id": "offered",
+      "label": "Stage 1: Results offered",
+      "kind": "stage",
+      "segments": [
+        "audio",
+        "orchestrator"
+      ],
+      "goal": "Any specific reply. Their answer on live vs recorded audio frames the card.",
+      "value": "The edtech pilot result, offered not attached",
+      "ask": "One fact: live vs recorded mix",
+      "learn": "Whether batch audio exists, which is where cheaper GPUs hold",
+      "messages": [],
+      "exits": [
+        {
+          "id": "replied",
+          "to": "engaged",
+          "kind": "advance",
+          "when": "Any reply that isn't one of the objections below"
+        },
+        {
+          "id": "offer_no_reply",
+          "to": "nudged",
+          "kind": "timeout",
+          "after_days": 7,
+          "when": "No reply after about a week"
+        }
+      ]
+    },
+    {
+      "id": "nudged",
+      "label": "Stage 1: One follow-up sent",
+      "kind": "stage",
+      "segments": [
+        "audio",
+        "orchestrator"
+      ],
+      "goal": "One reply to the single follow-up. No second bump.",
+      "messages": [
+        {
+          "id": "stage1_followup",
+          "label": "Stage 1 follow-up (send once)",
+          "text": "Hi {First}, quick follow-up on my last note. We ran a small pilot with an edtech company on their transcription workload and saw significant cost savings at the same output quality. Curious if that would be useful for {Company}; happy to send over the results either way."
+        }
+      ],
+      "exits": [
+        {
+          "id": "replied_after_nudge",
+          "to": "engaged",
+          "kind": "advance",
+          "when": "Any reply"
+        },
+        {
+          "id": "nudge_no_reply",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 7,
+          "when": "Still silent a week after the follow-up"
+        }
+      ]
+    },
+    {
+      "id": "chat_asked",
+      "label": "Stage 1: Chat asked",
+      "kind": "stage",
+      "segments": [
+        "non_audio"
+      ],
+      "goal": "A 15-minute research call. Interim until a document or retrieval card exists.",
+      "ask": "15 minutes",
+      "messages": [],
+      "exits": [
+        {
+          "id": "chat_booked",
+          "to": "discovery",
+          "kind": "advance",
+          "when": "They agree to a call"
+        },
+        {
+          "id": "chat_no_reply",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 10,
+          "when": "No reply"
+        }
+      ]
+    },
+    {
+      "id": "engaged",
+      "label": "Stage 2: Replied, card sent",
+      "kind": "stage",
+      "segments": [
+        "audio",
+        "orchestrator"
+      ],
+      "goal": "Their GPU today and their p95 bar, so the card can be re-run as theirs.",
+      "value": "Results card framed to their answer; offer to re-run at their settings",
+      "ask": "Two facts: GPU today, p95 target. Rough is fine.",
+      "learn": "Current hardware, SLO, whether they own infra decisions",
+      "messages": [
+        {
+          "id": "card",
+          "label": "Send the results card with one line tied to their answer",
+          "text": "[One line tying the card to what they said: live vs recorded, clip length.] Here are the results: [card]."
+        },
+        {
+          "id": "rerun_offer",
+          "label": "Once they engage with the numbers",
+          "text": "Useful to know. Happy to re-run it at your real settings so the numbers are yours, not ours. Two things would do it: which GPU you're on today, and the p95 you hold yourselves to. Rough is fine."
+        }
+      ],
+      "do_not_claim": [
+        "Latency. Delivery was 348.6 s vs 153.8 s; inference 93.9 s vs 114.0 s on different GPUs.",
+        "A provider ranking. One file, one run, RTX 2000 Ada vs T4.",
+        "62.1% savings. That is ASR plus content generation; transcription alone is 35.3%.",
+        "Costs beyond what was observed: usage before credits, Modal failed attempts and setup ($0.069) excluded."
+      ],
+      "exits": [
+        {
+          "id": "settings_shared",
+          "to": "plan_offered",
+          "kind": "advance",
+          "when": "They share GPU and p95, even roughly"
+        },
+        {
+          "id": "card_no_reply",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 10,
+          "when": "Card read, no answer to the re-run offer"
+        }
+      ]
+    },
+    {
+      "id": "plan_offered",
+      "label": "Stage 3: Settings shared, plan offered",
+      "kind": "stage",
+      "segments": [
+        "audio",
+        "orchestrator"
+      ],
+      "goal": "A rough load profile, which is where multi-provider routing pays.",
+      "value": "Card re-run at their settings; per-workload plan offered",
+      "ask": "Rough load profile: requests per hour across a day, typical input length",
+      "learn": "Volume, peak-to-trough ratio, provider mix, switching cost",
+      "messages": [
+        {
+          "id": "plan_offer",
+          "label": "Workload-fit plan offer",
+          "text": "At your settings, [GPU B] holds your p95 at about [x]% of what you pay on [GPU A]. The bigger number is usually load shape: if you can share a rough profile (requests per hour across a day, typical input length), I'll turn it into a per-workload plan with the monthly delta, within a couple of days."
+        }
+      ],
+      "do_not_claim": [
+        "Any bracket not filled from a real run."
+      ],
+      "exits": [
+        {
+          "id": "profile_shared",
+          "to": "plan_delivered",
+          "kind": "advance",
+          "when": "Load profile shared"
+        },
+        {
+          "id": "plan_offer_no_reply",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 10,
+          "when": "No profile after the offer"
+        }
+      ]
+    },
+    {
+      "id": "plan_delivered",
+      "label": "Stage 4: Plan delivered",
+      "kind": "stage",
+      "goal": "They ask to walk through the method: the call ask, framed as help.",
+      "value": "One-page workload-fit plan with the monthly delta",
+      "ask": "Nothing attached to the delivery",
+      "messages": [
+        {
+          "id": "plan_delivery",
+          "label": "Plan PDF, no ask",
+          "text": "Here's the plan: [X]/month delta, mainly from [driver: a 4B model on H100s / reserved capacity idle overnight / one provider for bursty traffic]. Happy to walk through the method if useful; totally fine if the numbers speak for themselves."
+        }
+      ],
+      "exits": [
+        {
+          "id": "call_booked",
+          "to": "discovery",
+          "kind": "advance",
+          "when": "They want to walk through it"
+        },
+        {
+          "id": "plan_no_reply",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 10,
+          "when": "Plan read, no follow-up"
+        }
+      ]
+    },
+    {
+      "id": "discovery",
+      "label": "Stage 5: Discovery call",
+      "kind": "stage",
+      "goal": "Qualify on past facts: spend that matters, a real prior fix attempt, a budget holder, a dated trigger.",
+      "ask": "30 minutes",
+      "learn": "Switching history, capacity pain, budget authority, next load change",
+      "messages": [
+        {
+          "id": "discovery_questions",
+          "label": "Questions (past facts only, never hypotheticals)",
+          "text": "- Walk me through the last time you changed GPU type or provider. What triggered it, and who made the call?\n- What happened the last time demand outran your capacity?\n- What have you already tried to bring serving cost down?\n- Who signed off the last time infra spend changed?\n- What's the next launch, customer or model release that changes your load?"
+        }
+      ],
+      "exits": [
+        {
+          "id": "qualified",
+          "to": "pilot",
+          "kind": "advance",
+          "when": "All four: spend that matters, prior attempt, budget holder, dated trigger"
+        },
+        {
+          "id": "not_qualified",
+          "to": "nurture",
+          "kind": "disqualify",
+          "when": "Small spend or no pain"
+        },
+        {
+          "id": "no_show",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 7,
+          "when": "Call missed and not rebooked"
+        }
+      ]
+    },
+    {
+      "id": "pilot",
+      "label": "Stage 6: Shadow pilot",
+      "kind": "stage",
+      "goal": "Two weeks of a live traffic slice on their own provider accounts; they see the delta and p95 before deciding.",
+      "value": "Measured delta on their own traffic",
+      "ask": "One integration call",
+      "learn": "Budget authority, timeline, who signs",
+      "messages": [
+        {
+          "id": "pilot_offer",
+          "label": "Shadow pilot offer",
+          "text": "If the number holds up, we could route a slice of live traffic for two weeks on your own provider accounts. No upfront commitment; you see the actual delta and p95 before deciding anything."
+        }
+      ],
+      "exits": [
+        {
+          "id": "converted",
+          "to": "customer",
+          "kind": "advance",
+          "when": "They sign after the pilot"
+        },
+        {
+          "id": "pilot_declined",
+          "to": "nurture",
+          "kind": "disqualify",
+          "when": "Pilot ran, they pass"
+        },
+        {
+          "id": "pilot_stalled",
+          "to": "nurture",
+          "kind": "timeout",
+          "after_days": 21,
+          "when": "Integration never happened"
+        }
+      ]
+    },
+    {
+      "id": "nurture",
+      "label": "Stage 7: Nurture",
+      "kind": "nurture",
+      "goal": "Stay in view without chasing: monthly GPU-fit index for their model class. No ask, no bumps.",
+      "messages": [
+        {
+          "id": "monthly_index",
+          "label": "Monthly GPU-fit index",
+          "text": "[Monthly GPU-fit index for their model class. No ask.]"
+        }
+      ],
+      "exits": [
+        {
+          "id": "reengaged",
+          "to": "engaged",
+          "kind": "reengage",
+          "when": "They reply to the index with a specific question",
+          "segments": [
+            "audio",
+            "orchestrator"
+          ]
+        },
+        {
+          "id": "reengaged_chat",
+          "to": "chat_asked",
+          "kind": "reengage",
+          "when": "They reply to the index",
+          "segments": [
+            "non_audio"
+          ]
+        },
+        {
+          "id": "opt_out",
+          "to": "lost",
+          "kind": "disqualify",
+          "when": "Asked not to be contacted"
+        }
+      ]
+    },
+    {
+      "id": "customer",
+      "label": "Customer",
+      "kind": "won",
+      "goal": "Paying, routed traffic.",
+      "messages": [],
+      "exits": []
+    },
+    {
+      "id": "lost",
+      "label": "Opted out",
+      "kind": "lost",
+      "goal": "Asked to stop. Never contact again.",
+      "messages": [],
+      "exits": []
+    }
+  ],
+  "objections": [
+    {
+      "id": "own_gpus",
+      "label": "\"We own our GPUs\"",
+      "status": "observed",
+      "at": [
+        "offered",
+        "nudged",
+        "chat_asked",
+        "engaged",
+        "plan_delivered",
+        "discovery"
+      ],
+      "signals": [
+        "own gpus",
+        "our own gpus",
+        "own hardware",
+        "own cluster",
+        "our own cluster",
+        "own fleet",
+        "on-prem",
+        "on prem",
+        "our data center",
+        "our datacenter",
+        "we bought",
+        "own infrastructure"
+      ],
+      "reading": "Own-fleet team: no provider bill to audit. The question becomes which jobs deserve the top cards, and what happens at peaks.",
+      "response": "Makes sense. On your own fleet the question shifts from provider price to which workloads actually need the top cards: recorded and batch audio usually runs fine on older GPUs, which frees the expensive ones for live traffic and leaves rented capacity only for peaks. That split is what the pilot results show; happy to send them.",
+      "to": "engaged",
+      "to_by_segment": {
+        "non_audio": "nurture"
+      }
+    },
+    {
+      "id": "latency_only",
+      "label": "\"Latency is all we care about\"",
+      "status": "observed",
+      "at": [
+        "offered",
+        "nudged",
+        "chat_asked",
+        "engaged",
+        "plan_offered",
+        "discovery"
+      ],
+      "signals": [
+        "latency is",
+        "latency matters",
+        "latency-sensitive",
+        "latency sensitive",
+        "low latency",
+        "real-time",
+        "realtime",
+        "real time",
+        "p95",
+        "p99",
+        "ttfb",
+        "time to first",
+        "can't compromise",
+        "cannot compromise"
+      ],
+      "reading": "Real-time team. The live path is off limits; any saving has to come from traffic with no live bar.",
+      "response": "Agreed, live traffic stays on whatever holds your p95; we wouldn't touch that. The savings in the pilot came from recorded and batch audio, which has no live latency bar. Is any of your volume recorded, or is it all live?",
+      "to": "engaged",
+      "to_by_segment": {
+        "non_audio": "nurture"
+      }
+    },
+    {
+      "id": "not_my_call",
+      "label": "\"Not my call / talk to infra\"",
+      "status": "observed",
+      "at": [
+        "offered",
+        "nudged",
+        "chat_asked",
+        "engaged",
+        "plan_offered",
+        "plan_delivered",
+        "discovery"
+      ],
+      "signals": [
+        "not my call",
+        "not my area",
+        "not my team",
+        "not the right person",
+        "infra team",
+        "infrastructure team",
+        "platform team",
+        "someone else handles",
+        "talk to our",
+        "speak to our",
+        "reach out to our",
+        "loop in",
+        "better person",
+        "handles that"
+      ],
+      "reading": "Wrong seat. Keep them warm and get the name of whoever signed off the last infra change.",
+      "response": "Thanks, that helps. Who on the infra side would be the right person? Happy to send them the results directly so you're not playing messenger.",
+      "to": "nurture",
+      "spawn": {
+        "node": "prospect",
+        "note": "Referred by {referrer}; mention the referral in the connection note."
+      }
+    },
+    {
+      "id": "who_is_pilot",
+      "label": "\"Which edtech company? Show me\"",
+      "status": "hypothesis",
+      "at": [
+        "offered",
+        "nudged"
+      ],
+      "signals": [
+        "which company",
+        "who was",
+        "which edtech",
+        "case study",
+        "proof",
+        "can you share",
+        "name the"
+      ],
+      "reading": "Interested but sceptical. Good sign; they want the numbers.",
+      "response": "They'd rather stay unnamed, but the card has the setup and numbers: same audio, same model, two GPU configs, observed cost. Sending it now.",
+      "to": "engaged"
+    },
+    {
+      "id": "already_on_platform",
+      "label": "\"We already use Modal / Baseten / our cloud credits\"",
+      "status": "hypothesis",
+      "at": [
+        "offered",
+        "nudged",
+        "chat_asked",
+        "engaged",
+        "discovery"
+      ],
+      "signals": [
+        "modal",
+        "baseten",
+        "together ai",
+        "replicate",
+        "fireworks",
+        "cloud credits",
+        "credits",
+        "already use",
+        "already on",
+        "happy with our"
+      ],
+      "reading": "Has a provider and maybe free credits. Gridline runs on their accounts, so this is not a switch; credits running out is a dated trigger.",
+      "response": "That works; Gridline runs on your own provider accounts, so nothing moves off them. The question is only which GPU type each workload lands on there. When do the credits run out, roughly?",
+      "to": "engaged",
+      "to_by_segment": {
+        "non_audio": "discovery"
+      }
+    },
+    {
+      "id": "not_now",
+      "label": "\"Not a priority right now\"",
+      "status": "hypothesis",
+      "at": [
+        "offered",
+        "nudged",
+        "chat_asked",
+        "engaged",
+        "plan_delivered"
+      ],
+      "signals": [
+        "not a priority",
+        "not right now",
+        "maybe later",
+        "next quarter",
+        "busy",
+        "no bandwidth",
+        "not now",
+        "circle back"
+      ],
+      "reading": "No dated trigger yet. Ask for the event that would make it one, then nurture.",
+      "response": "Totally fair. Is there a launch or a capacity crunch coming up that would make GPU cost worth a look? I'll keep you on the monthly GPU-fit index in the meantime, no asks.",
+      "to": "nurture"
+    },
+    {
+      "id": "card_not_applicable",
+      "label": "\"One file, one run: doesn't apply to us\"",
+      "status": "hypothesis",
+      "at": [
+        "engaged"
+      ],
+      "signals": [
+        "one file",
+        "one run",
+        "sample size",
+        "not representative",
+        "different model",
+        "doesn't apply",
+        "our workload is different",
+        "t4"
+      ],
+      "reading": "Engaged with the numbers. This is the opening for the re-run ask.",
+      "response": "Fair, it's one run and not your model. That's why I'd rather re-run it at your settings: which GPU you're on today and the p95 you hold. Rough is fine.",
+      "to": "engaged"
+    },
+    {
+      "id": "latency_worse",
+      "label": "\"Your card shows slower delivery\"",
+      "status": "hypothesis",
+      "at": [
+        "engaged"
+      ],
+      "signals": [
+        "slower",
+        "348",
+        "delivery time",
+        "took longer",
+        "worse latency"
+      ],
+      "reading": "Read the card closely. Be exact: delivery included queueing and cold start; inference was faster but on different GPUs. Not a latency claim.",
+      "response": "Good catch. Delivery time includes queueing and cold start, which the pilot didn't tune; inference itself was 93.9 s vs 114.0 s, on different GPUs, so I wouldn't read it as a latency claim either way. That's the case for re-running at your p95 bar.",
+      "to": "engaged"
+    },
+    {
+      "id": "wont_share_settings",
+      "label": "Replies, won't share GPU or p95",
+      "status": "hypothesis",
+      "at": [
+        "engaged"
+      ],
+      "signals": [
+        "can't share",
+        "cannot share",
+        "confidential",
+        "nda",
+        "not able to share",
+        "rather not"
+      ],
+      "reading": "Curiosity, not a problem they own. Not ready for a discovery ask.",
+      "response": "No problem at all. I'll send the monthly GPU-fit index for your model class; if a number in it looks off for your setup, just reply.",
+      "to": "nurture"
+    },
+    {
+      "id": "proxy_not_ours",
+      "label": "\"That's not our model\"",
+      "status": "hypothesis",
+      "at": [
+        "engaged",
+        "plan_offered"
+      ],
+      "signals": [
+        "not our model",
+        "our model is different",
+        "proxy",
+        "we don't use whisper",
+        "different architecture"
+      ],
+      "reading": "Proxy credibility gap. The fix is their weights or endpoint, which is a bigger yes.",
+      "response": "Right, it's the closest open model, labelled as a proxy. If you can point me at a private endpoint or a test checkpoint, I'll run the same benchmark on the real thing.",
+      "to": "engaged"
+    },
+    {
+      "id": "cant_share_profile",
+      "label": "Won't share a load profile",
+      "status": "hypothesis",
+      "at": [
+        "plan_offered"
+      ],
+      "signals": [
+        "can't share",
+        "traffic data",
+        "confidential",
+        "don't have that",
+        "no visibility"
+      ],
+      "reading": "Sensitive or unknown. Build the plan from stated assumptions instead and say so.",
+      "response": "No problem. I'll build it from public signals and a typical day-night curve for your model class, with every assumption written on the page, so you can correct the ones that are off.",
+      "to": "plan_delivered"
+    },
+    {
+      "id": "delta_too_small",
+      "label": "\"The savings are too small to bother\"",
+      "status": "hypothesis",
+      "at": [
+        "plan_delivered",
+        "pilot"
+      ],
+      "signals": [
+        "too small",
+        "not worth",
+        "not enough",
+        "marginal",
+        "rounding error"
+      ],
+      "reading": "Spend too small today. Real answer, not an objection to argue with.",
+      "response": "That's a fair read at today's volume. I'll keep you on the monthly index; if volume grows, the same plan scales with it.",
+      "to": "nurture"
+    },
+    {
+      "id": "build_in_house",
+      "label": "\"We'd build this ourselves\"",
+      "status": "hypothesis",
+      "at": [
+        "plan_delivered",
+        "discovery"
+      ],
+      "signals": [
+        "in-house",
+        "in house",
+        "ourselves",
+        "our own tooling",
+        "build it",
+        "we could do this"
+      ],
+      "reading": "Has infra engineers and opinions. Discovery: what they already tried, and what it cost.",
+      "response": "You could, and some teams do. Worth comparing notes on what you've already tried: what did the last attempt at bringing serving cost down look like?",
+      "to": "discovery"
+    },
+    {
+      "id": "switching_cost",
+      "label": "\"Integration is too much work\"",
+      "status": "hypothesis",
+      "at": [
+        "discovery",
+        "pilot"
+      ],
+      "signals": [
+        "integration",
+        "migration",
+        "switching",
+        "engineering time",
+        "too much work",
+        "rewrite"
+      ],
+      "reading": "Real cost. The shadow pilot is one call and a traffic slice; make the first step that small.",
+      "response": "The pilot is one integration call and a small slice of traffic on your own accounts; nothing else changes. If the delta doesn't show up in two weeks, you've lost a call.",
+      "to": "pilot"
+    },
+    {
+      "id": "data_security",
+      "label": "\"Data can't leave our accounts\"",
+      "status": "hypothesis",
+      "at": [
+        "discovery",
+        "pilot"
+      ],
+      "signals": [
+        "security",
+        "compliance",
+        "soc 2",
+        "soc2",
+        "hipaa",
+        "gdpr",
+        "data residency",
+        "can't leave",
+        "pii"
+      ],
+      "reading": "Gate, not a no. Everything runs on their own provider accounts.",
+      "response": "It wouldn't. Gridline routes within your own provider accounts; audio never passes through us. Happy to send the architecture page for your security review.",
+      "to": "pilot"
+    },
+    {
+      "id": "no_trigger",
+      "label": "No dated trigger",
+      "status": "hypothesis",
+      "at": [
+        "discovery"
+      ],
+      "signals": [
+        "no rush",
+        "no timeline",
+        "eventually",
+        "someday",
+        "not urgent"
+      ],
+      "reading": "Pain without urgency. Fails the qualification bar.",
+      "response": "Makes sense. I'll keep sending the monthly index; when the next launch or renewal is on the calendar, it'll be ready.",
+      "to": "nurture"
+    },
+    {
+      "id": "p95_regressed",
+      "label": "p95 regressed in the pilot",
+      "status": "hypothesis",
+      "at": [
+        "pilot"
+      ],
+      "signals": [
+        "regressed",
+        "slower",
+        "latency went up",
+        "p95 got worse",
+        "timeouts"
+      ],
+      "reading": "The routed slice broke their bar. Roll it back and retune before anything else.",
+      "response": "Rolling that slice back now. I'll look at which requests crossed the bar and re-route only the ones with headroom before we restart.",
+      "to": "pilot"
+    },
+    {
+      "id": "not_interested",
+      "label": "\"Not interested\"",
+      "status": "hypothesis",
+      "at": [
+        "requested",
+        "offered",
+        "nudged",
+        "chat_asked"
+      ],
+      "signals": [
+        "not interested",
+        "no thanks",
+        "no thank you",
+        "not for us",
+        "we'll pass",
+        "i'll pass",
+        "unsubscribe",
+        "stop messaging"
+      ],
+      "reading": "A clean no. Respect it; one line, no rebuttal. Opt-out wording moves them to lost instead.",
+      "response": "Understood, thanks for letting me know.",
+      "to": "nurture"
+    },
+    {
+      "id": "what_selling",
+      "label": "\"What are you selling?\"",
+      "status": "hypothesis",
+      "at": [
+        "connected",
+        "chat_asked"
+      ],
+      "signals": [
+        "what are you selling",
+        "what do you do",
+        "what is gridline",
+        "what's gridline",
+        "sales pitch",
+        "pitch"
+      ],
+      "reading": "They wrote first, guarded. Answer in one honest line, then ask the Stage 1 question.",
+      "response": "Fair question. Gridline benchmarks models across GPU types and routes each workload to the cheapest hardware that still meets its latency bar, on your own provider accounts. Nothing to buy today; I'm trying to learn how teams like {Company} split live and batch work.",
+      "to": "offered",
+      "to_by_segment": {
+        "non_audio": "chat_asked"
+      }
+    }
+  ],
+  "import": {
+    "lead_fields": [
+      "category",
+      "own_models",
+      "workload"
+    ],
+    "derive": {
+      "class": {
+        "from": "category",
+        "map": {
+          "voice": "speech and dialog models",
+          "document": "document models",
+          "both": "speech and document models",
+          "voice_video": "real-time audio and video models",
+          "retrieval": "embedding and retrieval models",
+          "web_data": "web extraction and search models"
+        }
+      }
+    },
+    "status": {
+      "connection": "request_sent",
+      "inmail": "request_sent",
+      "later": "park"
+    },
+    "stage": {
+      "s0": "connected",
+      "s1": {
+        "audio": "offered",
+        "orchestrator": "offered",
+        "non_audio": "chat_asked"
+      },
+      "s2": "engaged",
+      "s3": "plan_offered",
+      "s4": "plan_delivered",
+      "s5": "discovery",
+      "s6": "pilot",
+      "s7": "nurture"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+[
+  { "name": "Acme Speech", "category": "voice", "own_models": "own", "workload": "voice",
+    "people": [ { "name": "Ada Example", "title": "Head of ML Infrastructure", "role": "infra" }, { "name": "Bo Sample", "title": "CTO", "role": "exec" } ] },
+  { "name": "Relay Voice (Relay Labs)", "category": "voice", "own_models": "orchestrator", "workload": "voice",
+    "people": [ { "name": "Cy Placeholder", "title": "Staff Engineer", "role": "eng" } ] },
+  { "name": "Parse Docs", "category": "document", "own_models": "own", "workload": "document",
+    "people": [ { "name": "Dr. Di Fixture", "title": "Founder", "role": "exec" } ] },
+  { "name": "Mystery Robotics", "category": "robotics", "own_models": "own", "workload": "robotics",
+    "people": [ { "name": "Eve Nobody", "title": "CEO", "role": "exec" } ] }
+]

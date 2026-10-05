@@ -1,0 +1,611 @@
+<title>Compute Market Map</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#EDF0F2; --surface:#FFFFFF; --surface-2:#F4F6F8; --ink:#111A24; --dim:#5C6773; --border:#D6DCE1;
+    --accent:#1B5E8C; --accent-soft:#E1ECF5;
+    --r-competitor:#B8431A; --r-competitor-soft:#F8E4DB;
+    --r-supplier:#2A7A4B; --r-supplier-soft:#DFF0E5;
+    --r-partner:#6A4FB0; --r-partner-soft:#ECE6F8;
+    --r-adjacent:#6B7682; --r-adjacent-soft:#E8ECEF;
+    --r-buyer:#1B5E8C; --r-buyer-soft:#E1ECF5;
+    --r-unknown:#8A8F94; --r-unknown-soft:#EEEFF0;
+    --warn:#A86A12; --warn-soft:#F7ECD8;
+    --bad:#B42318; --bad-soft:#FBE4E1;
+    --shadow:0 1px 2px rgba(17,26,36,.05), 0 10px 30px -18px rgba(17,26,36,.25);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1318; --surface:#151C23; --surface-2:#1B242D; --ink:#E4EAF0; --dim:#93A0AD; --border:#26313C;
+      --accent:#6FB3E0; --accent-soft:#16283A;
+      --r-competitor:#F08A62; --r-competitor-soft:#3A2016;
+      --r-supplier:#6BCB92; --r-supplier-soft:#15301F;
+      --r-partner:#B59CF0; --r-partner-soft:#2A2140;
+      --r-adjacent:#A3AEB9; --r-adjacent-soft:#222B34;
+      --r-buyer:#6FB3E0; --r-buyer-soft:#16283A;
+      --r-unknown:#9AA0A6; --r-unknown-soft:#23292F;
+      --warn:#E0A64A; --warn-soft:#33260F;
+      --bad:#F07A6E; --bad-soft:#3A1814;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.6);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1318; --surface:#151C23; --surface-2:#1B242D; --ink:#E4EAF0; --dim:#93A0AD; --border:#26313C;
+    --accent:#6FB3E0; --accent-soft:#16283A;
+    --r-competitor:#F08A62; --r-competitor-soft:#3A2016;
+    --r-supplier:#6BCB92; --r-supplier-soft:#15301F;
+    --r-partner:#B59CF0; --r-partner-soft:#2A2140;
+    --r-adjacent:#A3AEB9; --r-adjacent-soft:#222B34;
+    --r-buyer:#6FB3E0; --r-buyer-soft:#16283A;
+    --r-unknown:#9AA0A6; --r-unknown-soft:#23292F;
+    --warn:#E0A64A; --warn-soft:#33260F;
+    --bad:#F07A6E; --bad-soft:#3A1814;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{background:var(--bg); color:var(--ink); font:15px/1.5 "Public Sans",system-ui,sans-serif; padding-inline:20px; padding-block:24px 64px;}
+  .wrap{max-width:1180px; margin:0 auto;}
+  h1,h2,h3{font-family:"Bricolage Grotesque","Public Sans",system-ui,sans-serif; margin:0; text-wrap:balance;}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace;}
+  a{color:var(--accent);}
+  button,input,select,textarea{font:inherit; color:inherit;}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+  header.top{display:flex; flex-wrap:wrap; gap:10px 24px; align-items:flex-end; justify-content:space-between; margin-bottom:18px;}
+  .eyebrow{font-family:"JetBrains Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);}
+  h1{font-size:clamp(1.6rem,3.2vw,2.2rem); font-weight:700; letter-spacing:-.01em; margin-top:4px;}
+  .seedline{font-size:.84rem; color:var(--dim); max-width:70ch; margin-top:6px;}
+  .mode{font-family:"JetBrains Mono",monospace; font-size:.72rem; border:1px solid var(--border); border-radius:999px; padding:3px 10px; color:var(--dim); background:var(--surface);}
+
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:18px;}
+  .stat{background:var(--surface); padding:12px 16px;}
+  .stat .n{font-family:"JetBrains Mono",monospace; font-size:1.35rem; font-weight:500; font-variant-numeric:tabular-nums;}
+  .stat .l{font-size:.78rem; color:var(--dim);}
+  .stat .n small{font-size:.8rem; color:var(--dim);}
+
+  nav.tabs{display:flex; gap:22px; border-bottom:1px solid var(--border); margin-bottom:18px; overflow-x:auto; position:sticky; top:env(safe-area-inset-top,0px); background:var(--bg); z-index:5;}
+  nav.tabs button{background:none; border:0; border-bottom:2px solid transparent; padding:10px 2px; color:var(--dim); font-weight:600; cursor:pointer; white-space:nowrap;}
+  nav.tabs button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--accent);}
+  nav.tabs .badge{font-family:"JetBrains Mono",monospace; font-size:.7rem; background:var(--warn-soft); color:var(--warn); border-radius:999px; padding:1px 7px; margin-left:6px;}
+
+  .toolbar{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:14px;}
+  .toolbar input[type=search]{flex:1 1 220px; min-width:0; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 12px;}
+  .pill{border:1px solid var(--border); background:var(--surface); border-radius:999px; padding:5px 12px; font-size:.82rem; cursor:pointer; display:inline-flex; gap:7px; align-items:center;}
+  .pill[aria-pressed="true"]{border-color:var(--ink); background:var(--ink); color:var(--bg);}
+  .dot{width:9px; height:9px; border-radius:50%; flex:none; background:var(--r-unknown);}
+  .dot.competitor{background:var(--r-competitor);} .dot.supplier{background:var(--r-supplier);} .dot.partner{background:var(--r-partner);}
+  .dot.adjacent{background:var(--r-adjacent);} .dot.buyer{background:var(--r-buyer);}
+  .dot.hyp{background:transparent; border:2px solid currentColor;}
+
+  .map{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:14px;}
+  .box{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px 16px; box-shadow:var(--shadow);}
+  .box.home{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), var(--shadow);}
+  .box-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:10px;}
+  .box-head h2{font-family:"JetBrains Mono",monospace; font-size:.74rem; font-weight:500; letter-spacing:.07em; text-transform:uppercase; color:var(--dim);}
+  .box-head .count{font-family:"JetBrains Mono",monospace; font-size:.8rem; font-variant-numeric:tabular-nums;}
+  .chips{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:4px 10px;}
+  .chip{display:flex; gap:8px; align-items:flex-start; text-align:left; background:none; border:0; border-radius:8px; padding:6px 6px; cursor:pointer; min-width:0;}
+  .chip:hover{background:var(--surface-2);}
+  .chip .dot{margin-top:6px;}
+  .chip .nm{font-weight:600; font-size:.88rem; line-height:1.25; overflow-wrap:anywhere;}
+  .chip .hd{display:block; font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--dim); overflow-wrap:anywhere;}
+  .chip.you{background:var(--accent-soft); cursor:default;}
+  .chip.you .nm{color:var(--accent);}
+  .chip .flag{font-family:"JetBrains Mono",monospace; font-size:.62rem; color:var(--warn); background:var(--warn-soft); border-radius:4px; padding:0 4px; margin-left:4px; vertical-align:1px;}
+  .box-note{font-size:.78rem; color:var(--dim); margin-top:10px;}
+  .empty{color:var(--dim); font-size:.86rem; padding:6px;}
+
+  .legend{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:.78rem; color:var(--dim); margin-top:14px;}
+  .legend span{display:inline-flex; gap:6px; align-items:center;}
+
+  /* detail sheet */
+  .sheet-backdrop{position:fixed; inset:0; background:rgba(8,12,16,.35); z-index:20;}
+  .sheet{position:fixed; top:0; right:0; bottom:0; width:min(520px,100%); background:var(--surface); border-left:1px solid var(--border); z-index:21; overflow-y:auto; padding:calc(20px + env(safe-area-inset-top,0px)) 22px calc(28px + env(safe-area-inset-bottom,0px)); box-shadow:-20px 0 40px -20px rgba(0,0,0,.3);}
+  .sheet-head{display:flex; justify-content:space-between; gap:12px; align-items:flex-start;}
+  .sheet h2{font-size:1.45rem; font-weight:700;}
+  .x{background:none; border:1px solid var(--border); border-radius:8px; padding:4px 10px; cursor:pointer; color:var(--dim);}
+  .rolepill{display:inline-flex; gap:6px; align-items:center; font-size:.78rem; font-weight:600; border-radius:999px; padding:2px 10px; margin-top:8px;}
+  .rolepill.competitor{background:var(--r-competitor-soft); color:var(--r-competitor);}
+  .rolepill.supplier{background:var(--r-supplier-soft); color:var(--r-supplier);}
+  .rolepill.partner{background:var(--r-partner-soft); color:var(--r-partner);}
+  .rolepill.adjacent{background:var(--r-adjacent-soft); color:var(--r-adjacent);}
+  .rolepill.buyer{background:var(--r-buyer-soft); color:var(--r-buyer);}
+  .rolepill.unknown{background:var(--r-unknown-soft); color:var(--r-unknown);}
+  .meta-row{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:.8rem; color:var(--dim); margin-top:8px;}
+  .sec{margin-top:18px;}
+  .sec h3{font-family:"JetBrains Mono",monospace; font-size:.7rem; font-weight:500; letter-spacing:.07em; text-transform:uppercase; color:var(--dim); margin-bottom:6px;}
+  .facts{display:grid; grid-template-columns:8rem 1fr; gap:4px 12px; font-size:.88rem; margin:0;}
+  .facts dt{color:var(--dim);} .facts dd{margin:0; overflow-wrap:anywhere;}
+  .missing{color:var(--dim); font-style:italic;}
+  blockquote{margin:0 0 10px; padding:8px 12px; background:var(--surface-2); border-radius:8px; font-size:.86rem;}
+  blockquote footer{font-size:.74rem; color:var(--dim); margin-top:4px;}
+  .locked{font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--dim);}
+  ul.plain{list-style:none; margin:0; padding:0; font-size:.86rem;}
+  ul.plain li{padding:3px 0; overflow-wrap:anywhere;}
+  .edit{display:grid; gap:8px; margin-top:8px;}
+  .edit label{font-size:.8rem; color:var(--dim); display:grid; gap:4px;}
+  .edit input,.edit select,.edit textarea{background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:7px 10px; width:100%;}
+
+  /* review + runs */
+  .list{display:grid; gap:10px;}
+  .row{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px;}
+  .row-head{display:flex; flex-wrap:wrap; gap:6px 12px; align-items:baseline; justify-content:space-between;}
+  .row-head b{font-size:.95rem;}
+  .tag{font-family:"JetBrains Mono",monospace; font-size:.68rem; border-radius:5px; padding:1px 7px; text-transform:uppercase; letter-spacing:.04em;}
+  .tag.pending,.tag.candidate,.tag.new{background:var(--warn-soft); color:var(--warn);}
+  .tag.done,.tag.merged,.tag.active{background:var(--r-supplier-soft); color:var(--r-supplier);}
+  .tag.failed,.tag.bad{background:var(--bad-soft); color:var(--bad);}
+  .tag.neutral{background:var(--surface-2); color:var(--dim);}
+  .small{font-size:.82rem; color:var(--dim);}
+  .diffgrid{display:flex; flex-wrap:wrap; gap:4px 14px; font-family:"JetBrains Mono",monospace; font-size:.76rem; color:var(--dim); margin-top:8px; font-variant-numeric:tabular-nums;}
+  .diffgrid b{color:var(--ink); font-weight:500;}
+  .recall{margin-top:10px;}
+  .bar{height:8px; background:var(--surface-2); border-radius:999px; overflow:hidden; border:1px solid var(--border);}
+  .bar i{display:block; height:100%; background:var(--accent);}
+  .names{font-size:.8rem; margin-top:6px;}
+  .names span{color:var(--dim);}
+  details summary{cursor:pointer; font-size:.82rem; color:var(--accent); margin-top:8px;}
+
+  form.add{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px; display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:720px;}
+  form.add label{display:grid; gap:4px; font-size:.82rem; color:var(--dim);}
+  form.add .full{grid-column:1/-1;}
+  form.add input,form.add select,form.add textarea{background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:8px 10px; width:100%;}
+  .btn{background:var(--ink); color:var(--bg); border:0; border-radius:8px; padding:9px 16px; font-weight:600; cursor:pointer;}
+  .btn.secondary{background:var(--surface); color:var(--ink); border:1px solid var(--border);}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+  .notice{font-size:.86rem; padding:10px 14px; border-radius:8px; background:var(--accent-soft); color:var(--ink); margin-top:10px; max-width:720px;}
+  .notice.err{background:var(--bad-soft);}
+  .refresh{margin-top:24px; max-width:720px;}
+  .refresh h3{font-size:1rem; margin-bottom:6px;}
+  .cmd{display:flex; gap:8px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 10px; margin-top:8px;}
+  .cmd code{flex:1; font-family:"JetBrains Mono",monospace; font-size:.8rem; overflow-x:auto; white-space:nowrap;}
+  .actions{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px;}
+  .actions select{background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 10px;}
+
+  footer.src{margin-top:34px; padding-top:14px; border-top:1px solid var(--border); font-size:.78rem; color:var(--dim);}
+
+  @media (max-width:640px){
+    body{padding-inline:16px;}
+    .map{grid-template-columns:1fr;}
+    form.add{grid-template-columns:1fr;}
+    .facts{grid-template-columns:1fr;}
+    .facts dt{margin-top:6px;}
+    .sheet{top:12vh; width:100%; border-left:0; border-top:1px solid var(--border); border-radius:16px 16px 0 0;}
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .sheet{animation:slide .18s ease-out;}
+    @keyframes slide{from{transform:translateX(24px); opacity:.6;} to{transform:none; opacity:1;}}
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">GTM engine · step 1 · market map</div>
+      <h1>Compute Market Map</h1>
+      <div class="seedline" id="seedline">Loading the map…</div>
+    </div>
+    <span class="mode" id="mode">connecting</span>
+  </header>
+
+  <div class="stats" id="stats" aria-live="polite"></div>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="map" aria-selected="true">Map</button>
+    <button role="tab" data-tab="review" aria-selected="false">Review queue<span class="badge" id="reviewBadge" hidden></span></button>
+    <button role="tab" data-tab="runs" aria-selected="false">Agent runs</button>
+    <button role="tab" data-tab="add" aria-selected="false">Add or refresh</button>
+  </nav>
+
+  <section id="tab-map">
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="Search name, handle or evidence" aria-label="Search companies">
+      <div id="roleFilters" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+    <div class="map" id="map"></div>
+    <div class="legend">
+      <span><i class="dot competitor"></i>competitor</span>
+      <span><i class="dot supplier"></i>supplier</span>
+      <span><i class="dot partner"></i>partner</span>
+      <span><i class="dot adjacent"></i>adjacent</span>
+      <span>Hollow dot: role is a hypothesis you haven't confirmed</span>
+    </div>
+  </section>
+
+  <section id="tab-review" hidden>
+    <p class="small" style="max-width:70ch;margin-top:0">Manual adds wait here until the agent enriches them. Companies the agent discovers wait here until you accept them into the map.</p>
+    <div class="list" id="review"></div>
+  </section>
+
+  <section id="tab-runs" hidden>
+    <p class="small" style="max-width:70ch;margin-top:0">Every seed, ingest, manual add and agent run, with what it changed. Discovery runs are scored against the 58-company seed. A run that read the seed post is marked contaminated, and its recall doesn't count.</p>
+    <div class="list" id="runs"></div>
+  </section>
+
+  <section id="tab-add" hidden>
+    <form class="add" id="addForm">
+      <label class="full">Company name<input id="f-name" required placeholder="OpenRouter"></label>
+      <label>Website<input id="f-website" placeholder="https://openrouter.ai"></label>
+      <label>X handle<input id="f-handle" placeholder="OpenRouterAI"></label>
+      <label>Segment<select id="f-segment"><option value="">Let the agent decide</option></select></label>
+      <label>Why it belongs<input id="f-note" placeholder="Token router, acquired by Stripe"></label>
+      <div class="full"><button class="btn" id="addBtn" type="submit">Add to review queue</button></div>
+    </form>
+    <div id="addMsg" hidden></div>
+
+    <div class="refresh" id="refresh"></div>
+  </section>
+
+  <footer class="src" id="footer"></footer>
+</div>
+
+<div id="sheetRoot"></div>
+
+<script>
+(function(){
+  "use strict";
+  var ROLES = ["competitor","supplier","partner","adjacent","buyer","unknown"];
+  var S = { mode:null, segments:[], company:null, seed:null, companies:[], runs:[], submissions:[], agentBusy:false,
+            tab:"map", q:"", roles:new Set(), open:null, db:null };
+
+  function el(tag, attrs, kids){
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs){
+      var v = attrs[k];
+      if (v == null || v === false) continue;
+      if (k === "class") n.className = v;
+      else if (k === "text") n.textContent = v;
+      else if (k.slice(0,2) === "on") n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? "" : v);
+    }
+    (kids || []).forEach(function(c){ if (c != null && c !== false) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function clear(n){ while (n.firstChild) n.removeChild(n.firstChild); return n; }
+  function safeUrl(u){ try{ var x = new URL(u); return (x.protocol === "https:" || x.protocol === "http:") ? x.href : null; }catch(e){ return null; } }
+  function link(u, label){ var s = safeUrl(u); return s ? el("a", {href:s, target:"_blank", rel:"noopener", text:label || s}) : document.createTextNode(label || u || ""); }
+  function when(iso){ if (!iso) return ""; var d = new Date(iso); return isNaN(d) ? iso : d.toLocaleString(undefined, {month:"short", day:"numeric", hour:"2-digit", minute:"2-digit"}); }
+  function segLabel(id){ var s = S.segments.find(function(x){ return x.id === id; }); return s ? s.label : (id || "Unsorted"); }
+
+  /* ---------- data sources ---------- */
+  var hasHost = typeof window.claude !== "undefined" && window.claude && typeof window.claude.use === "function";
+
+  function startLocal(){
+    S.mode = "local";
+    function pull(){
+      return fetch("/api/state").then(function(r){ if (!r.ok) throw new Error("status " + r.status); return r.json(); })
+        .then(function(d){
+          S.segments = d.segments; S.company = d.company; S.seed = d.seed; S.companies = d.companies; S.runs = d.runs; S.agentBusy = !!d.agent_busy;
+          render();
+        });
+    }
+    pull().catch(function(){
+      S.mode = "offline"; render();
+    });
+    setInterval(function(){ if (S.agentBusy) pull().catch(function(){}); }, 5000);
+    S.reload = pull;
+  }
+
+  function startHosted(){
+    S.mode = "hosted-wait"; render();
+    window.claude.use("db").then(function(db){
+      if (!db){ S.mode = "hosted-none"; render(); return; }
+      S.db = db; S.mode = "hosted"; render();
+      db.doc("meta/map").onSnapshot(function(snap){
+        var d = snap.exists ? snap.data() : null;
+        if (d){ S.segments = d.segments || []; S.company = d.company || null; S.seed = d.seed || null; }
+        render();
+      }, onDbErr);
+      db.collection("companies").onSnapshot(function(snap){
+        S.companies = snap.docs.map(function(x){ return x.data(); });
+        render();
+      }, onDbErr);
+      db.collection("runs").orderBy("started_at", "desc").limit(30).onSnapshot(function(snap){
+        S.runs = snap.docs.map(function(x){ return x.data(); });
+        render();
+      }, onDbErr);
+      db.collection("submissions").onSnapshot(function(snap){
+        S.submissions = snap.docs.map(function(x){ var o = Object.assign({}, x.data()); o.id = x.id; return o; });
+        render();
+      }, onDbErr);
+    });
+  }
+  function onDbErr(e){ S.dbError = (e && e.message) || "The shared map stopped updating."; render(); }
+
+  /* ---------- render ---------- */
+  function inMap(c){ return c.status === "active"; }
+
+  function renderHeader(){
+    var line = document.getElementById("seedline");
+    clear(line);
+    if (S.seed){
+      line.append("Seeded from ", link(S.seed.post_url, S.seed.title), " by " + S.seed.author + ", published " + S.seed.published + ". " + (S.company ? S.company.name + " marked in its box." : ""));
+    } else if (S.mode === "offline"){
+      line.textContent = "No engine running. Start it with: bun run serve";
+    } else if (S.mode === "hosted-none"){
+      line.textContent = "This view can't reach the shared map.";
+    } else {
+      line.textContent = "Loading the map…";
+    }
+    var m = document.getElementById("mode");
+    m.textContent = ({local:"local engine", offline:"offline", hosted:"shared map", "hosted-wait":"connecting", "hosted-none":"read-only"})[S.mode] || S.mode;
+  }
+
+  function renderStats(){
+    var box = clear(document.getElementById("stats"));
+    var act = S.companies.filter(inMap);
+    function count(role){ return act.filter(function(c){ return c.role === role; }).length; }
+    var queue = S.companies.filter(function(c){ return c.status === "pending" || c.status === "candidate"; }).length +
+                S.submissions.filter(function(s){ return (s.status || "new") === "new"; }).length;
+    var lastRecall = S.runs.find(function(r){ return r.recall && r.status === "done"; });
+    var items = [
+      [String(act.length), "companies in the map"],
+      [String(count("competitor")), "competitors (hypothesis)"],
+      [String(count("supplier")), "possible suppliers"],
+      [String(queue), "waiting for review"],
+      [lastRecall ? (lastRecall.recall.found + "/" + lastRecall.recall.seed_total) : "–", lastRecall ? ("last blind recall · " + segLabel(lastRecall.recall.segment).split(":")[0].toLowerCase() + (lastRecall.recall.contaminated ? " · contaminated" : "")) : "no discovery run yet"],
+    ];
+    items.forEach(function(it){ box.appendChild(el("div", {class:"stat"}, [el("div", {class:"n", text:it[0]}), el("div", {class:"l", text:it[1]})])); });
+    var badge = document.getElementById("reviewBadge");
+    badge.hidden = queue === 0; badge.textContent = String(queue);
+  }
+
+  function matches(c){
+    if (S.roles.size && !S.roles.has(c.role)) return false;
+    if (!S.q) return true;
+    var q = S.q.toLowerCase();
+    var hay = [c.name, c.handle || "", (c.aliases || []).join(" "), c.one_liner || "", (c.evidence || []).map(function(e){ return e.text; }).join(" ")].join(" ").toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }
+
+  function renderFilters(){
+    var box = clear(document.getElementById("roleFilters"));
+    ["competitor","supplier","partner","adjacent"].forEach(function(r){
+      box.appendChild(el("button", {class:"pill", type:"button", "aria-pressed": String(S.roles.has(r)), onclick:function(){ S.roles.has(r) ? S.roles.delete(r) : S.roles.add(r); render(); }},
+        [el("i", {class:"dot " + r}), r]));
+    });
+  }
+
+  function chip(c){
+    var hyp = c.role_status !== "confirmed";
+    return el("button", {class:"chip", type:"button", onclick:function(){ S.open = c.id; renderSheet(); }, title: c.one_liner || c.name},
+      [el("i", {class:"dot " + (hyp ? "hyp " : "") + c.role, style: hyp ? "color:var(--r-" + c.role + ")" : null}),
+       el("span", {}, [el("span", {class:"nm"}, [c.name, c.status !== "active" ? el("span", {class:"flag", text:c.status}) : null]),
+                       el("span", {class:"hd", text: c.handle ? "@" + c.handle : (c.website ? c.website.replace(/^https?:\/\/(www\.)?/, "").split("/")[0] : "no handle")})])]);
+  }
+
+  function renderMap(){
+    var box = clear(document.getElementById("map"));
+    if (!S.companies.length){
+      box.appendChild(el("div", {class:"empty", text: S.mode === "offline" ? "Start the engine (bun run serve) or open the shared map to see companies." : "No companies yet."}));
+      return;
+    }
+    var segs = S.segments.slice();
+    var known = new Set(segs.map(function(s){ return s.id; }));
+    if (S.companies.some(function(c){ return !c.segment || !known.has(c.segment); })) segs.push({id:"__none", label:"Unsorted"});
+    segs.forEach(function(seg){
+      var list = S.companies.filter(function(c){
+        var sid = (c.segment && known.has(c.segment)) ? c.segment : "__none";
+        return sid === seg.id && c.status !== "rejected" && matches(c);
+      }).sort(function(a,b){ return (a.status === "active" ? 0 : 1) - (b.status === "active" ? 0 : 1) || a.name.localeCompare(b.name); });
+      var total = S.companies.filter(function(c){ return c.segment === seg.id && inMap(c); }).length;
+      var home = S.company && S.company.home_segment === seg.id;
+      if (!list.length && !home && seg.id !== "token_routers" && (S.q || S.roles.size)) return;
+      var chips = el("div", {class:"chips"});
+      if (home && !S.q && !S.roles.size) chips.appendChild(el("div", {class:"chip you"}, [el("i", {class:"dot", style:"background:var(--accent)"}), el("span", {}, [el("span", {class:"nm", text:S.company.name}), el("span", {class:"hd", text:"you are here"})])]));
+      list.forEach(function(c){ chips.appendChild(chip(c)); });
+      if (!list.length && !home) chips.appendChild(el("div", {class:"empty", text: seg.note || "Nothing here yet."}));
+      box.appendChild(el("div", {class:"box" + (home ? " home" : "")}, [
+        el("div", {class:"box-head"}, [el("h2", {text:seg.label}), el("span", {class:"count", text:String(total)})]),
+        chips,
+        seg.note && list.length ? el("div", {class:"box-note", text:seg.note}) : null,
+      ]));
+    });
+  }
+
+  function renderSheet(){
+    var root = clear(document.getElementById("sheetRoot"));
+    var c = S.companies.find(function(x){ return x.id === S.open; });
+    if (!c){ S.open = null; return; }
+    function close(){ S.open = null; clear(root); }
+    var facts = el("dl", {class:"facts"});
+    [["Website","website"],["Pricing","pricing_model"],["Funding","funding"],["HQ","hq"],["Founded","founded"]].forEach(function(f){
+      var v = c[f[1]];
+      facts.appendChild(el("dt", {text:f[0]}));
+      facts.appendChild(el("dd", {}, [v ? (f[1] === "website" ? link(v, v.replace(/^https?:\/\//, "")) : String(v)) : el("span", {class:"missing", text:"not found yet"})]));
+    });
+    var people = (c.people || []).length ? el("ul", {class:"plain"}, c.people.map(function(p){ return el("li", {}, [p.url ? link(p.url, p.name) : p.name, p.title ? " · " + p.title : ""]); })) : el("div", {class:"missing small", text:"No people yet. Enrichment fills this."});
+    var ev = (c.evidence || []).length ? el("div", {}, c.evidence.map(function(e){ return el("blockquote", {}, [e.text, el("footer", {}, [link(e.url, "source"), e.date ? " · " + e.date : ""])]); })) : el("div", {class:"missing small", text:"No evidence yet."});
+    var src = (c.sources || []).length ? el("ul", {class:"plain"}, c.sources.map(function(s){ return el("li", {}, [link(s.url, s.title || s.url), s.accessed ? " · " + s.accessed : ""]); })) : null;
+
+    var editor = null;
+    if (S.mode === "local"){
+      var roleSel = el("select", {id:"e-role"}, ROLES.map(function(r){ return el("option", {value:r, selected: r === c.role ? true : null, text:r}); }));
+      var one = el("input", {id:"e-one", value: c.one_liner || ""});
+      var msg = el("div", {class:"small"});
+      editor = el("div", {class:"sec"}, [el("h3", {text:"Your call"}), el("div", {class:"edit"}, [
+        el("label", {}, ["Role", roleSel]), el("label", {}, ["One-liner", one]),
+        el("div", {class:"actions"}, [
+          el("button", {class:"btn", type:"button", onclick:function(){
+            var patch = {}; if (roleSel.value !== c.role || c.role_status !== "confirmed") patch.role = roleSel.value; if (one.value !== (c.one_liner || "")) patch.one_liner = one.value;
+            fetch("/api/companies/" + encodeURIComponent(c.id), {method:"PATCH", headers:{"content-type":"application/json"}, body:JSON.stringify({patch:patch})})
+              .then(function(r){ return r.json(); }).then(function(){ msg.textContent = "Saved and locked. Agent runs won't change these fields."; return S.reload(); }).then(renderSheet)
+              .catch(function(e){ msg.textContent = "Couldn't save: " + e.message; });
+          }, text:"Save and lock"}),
+          c.status !== "active" ? el("button", {class:"btn secondary", type:"button", onclick:function(){ setStatus(c, "active"); }, text:"Accept into map"}) : null,
+          c.status !== "rejected" ? el("button", {class:"btn secondary", type:"button", onclick:function(){ setStatus(c, "rejected"); }, text:"Reject"}) : null,
+        ]), msg])]);
+    }
+
+    root.appendChild(el("div", {class:"sheet-backdrop", onclick:close}));
+    root.appendChild(el("aside", {class:"sheet", role:"dialog", "aria-label":c.name}, [
+      el("div", {class:"sheet-head"}, [el("div", {}, [el("div", {class:"eyebrow", text:segLabel(c.segment)}), el("h2", {text:c.name})]), el("button", {class:"x", type:"button", onclick:close, text:"Close"})]),
+      el("span", {class:"rolepill " + c.role}, [c.role, c.role_status === "confirmed" ? " · confirmed" : " · hypothesis"]),
+      el("div", {class:"meta-row"}, [c.handle ? el("span", {class:"mono", text:"@" + c.handle}) : null, el("span", {text:"origin: " + c.origin}), el("span", {text:"status: " + c.status}), (c.aliases || []).length ? el("span", {text:"aka " + c.aliases.join(", ")}) : null]),
+      el("div", {class:"sec"}, [el("h3", {text:"What they do"}), c.one_liner ? el("p", {style:"margin:0 0 6px;font-weight:500", text:c.one_liner}) : el("div", {class:"missing small", text:"No one-liner yet."}), c.brief ? el("p", {style:"margin:0;font-size:.9rem", text:c.brief}) : null]),
+      el("div", {class:"sec"}, [el("h3", {text:"Facts"}), facts]),
+      el("div", {class:"sec"}, [el("h3", {text:"People"}), people]),
+      el("div", {class:"sec"}, [el("h3", {text:"What the market says"}), ev]),
+      src ? el("div", {class:"sec"}, [el("h3", {text:"Sources"}), src]) : null,
+      c.note ? el("div", {class:"sec"}, [el("h3", {text:"Note"}), el("p", {style:"margin:0;font-size:.88rem", text:c.note})]) : null,
+      (c.locked || []).length ? el("div", {class:"locked sec", text:"Locked by you: " + c.locked.join(", ")}) : null,
+      editor,
+    ]));
+  }
+
+  function setStatus(c, status){
+    fetch("/api/companies/" + encodeURIComponent(c.id), {method:"PATCH", headers:{"content-type":"application/json"}, body:JSON.stringify({patch:{status:status}, lock:false})})
+      .then(function(){ return S.reload(); }).then(renderSheet);
+  }
+
+  function renderReview(){
+    var box = clear(document.getElementById("review"));
+    var rows = [];
+    S.submissions.filter(function(s){ return (s.status || "new") === "new"; }).forEach(function(s){
+      rows.push(el("div", {class:"row"}, [el("div", {class:"row-head"}, [el("b", {text:s.name}), el("span", {class:"tag new", text:"submitted"})]),
+        el("div", {class:"small", text:[s.website, s.handle ? "@" + s.handle.replace(/^@/, "") : "", s.segment ? segLabel(s.segment) : "", s.note].filter(Boolean).join(" · ") || "No details"}),
+        el("div", {class:"small", text:"Merges into the map on the next refresh."})]));
+    });
+    S.companies.filter(function(c){ return c.status === "pending" || c.status === "candidate"; }).forEach(function(c){
+      rows.push(el("div", {class:"row"}, [el("div", {class:"row-head"}, [el("b", {}, [el("button", {class:"chip", type:"button", style:"padding:0", onclick:function(){ S.open = c.id; renderSheet(); }}, [el("span", {class:"nm", text:c.name})])]), el("span", {class:"tag " + c.status, text: c.status === "pending" ? "waiting for enrichment" : "agent found it"})]),
+        el("div", {class:"small", text:(c.one_liner || "No description yet") + " · " + segLabel(c.segment)})]));
+    });
+    if (!rows.length) rows.push(el("div", {class:"empty", text:"Nothing waiting. Add a company or run discovery to fill this."}));
+    rows.forEach(function(r){ box.appendChild(r); });
+  }
+
+  function renderRuns(){
+    var box = clear(document.getElementById("runs"));
+    if (!S.runs.length){ box.appendChild(el("div", {class:"empty", text:"No runs yet."})); return; }
+    S.runs.forEach(function(r){
+      var d = r.diff;
+      var kids = [el("div", {class:"row-head"}, [el("b", {text:({seed:"Seed", ingest:"Ingest X post", manual:"Manual add", discover:"Discover", enrich:"Enrich", sync:"Web submissions"})[r.kind] + (r.segment ? " · " + segLabel(r.segment) : "") + (r.blind ? " · blind" : "")}),
+        el("span", {}, [el("span", {class:"tag " + r.status, text:r.status}), " ", el("span", {class:"small", text:when(r.started_at)})])])];
+      if (r.error) kids.push(el("div", {class:"notice err", text:r.error}));
+      if (d){
+        var appended = (d.appended || []).reduce(function(n, a){ return n + a.count; }, 0);
+        kids.push(el("div", {class:"diffgrid"}, [["added", d.added.length], ["filled", d.filled.length], ["changed", d.changed.length], ["kept locked", d.skipped_locked.length], ["appended", appended], ["proposed", (d.proposed || []).length], ["ambiguous", d.ambiguous.length], ["unchanged", d.unchanged.length]]
+          .map(function(p){ return el("span", {}, [p[0] + " ", el("b", {text:String(p[1])})]); })));
+      }
+      if (r.recall){
+        var rc = r.recall, pct = Math.round(rc.recall * 100);
+        kids.push(el("div", {class:"recall"}, [
+          el("div", {class:"small"}, ["Recall against the seed box: ", el("b", {text: rc.found + " of " + rc.seed_total + " (" + pct + "%)"}), rc.contaminated ? el("span", {class:"tag bad", style:"margin-left:8px", text:"contaminated"}) : el("span", {class:"tag neutral", style:"margin-left:8px", text:"clean"})]),
+          el("div", {class:"bar", role:"img", "aria-label": pct + "% recall"}, [el("i", {style:"width:" + pct + "%"})]),
+          rc.missing.length ? el("div", {class:"names"}, [el("span", {text:"Missed: "}), rc.missing.join(", ")]) : null,
+          rc.new_names.length ? el("div", {class:"names"}, [el("span", {text:"Found beyond the seed: "}), rc.new_names.join(", ")]) : null,
+        ]));
+      }
+      if (d && (d.proposed || []).length){
+        kids.push(el("details", {}, [el("summary", {text:"Agent disagreed on " + d.proposed.length + " segment or role"}), el("ul", {class:"plain small"}, d.proposed.map(function(p){ return el("li", {text:p.id + ": " + p.field + " " + p.old + " → " + p.new}); }))]));
+      }
+      if (d && d.ambiguous.length){
+        kids.push(el("details", {}, [el("summary", {text:d.ambiguous.length + " ambiguous matches not merged"}), el("ul", {class:"plain small"}, d.ambiguous.map(function(a){ return el("li", {text:a.name + " could be " + a.matches.join(" or ")}); }))]));
+      }
+      if (r.cost_usd != null && r.cost_usd > 0) kids.push(el("div", {class:"small", style:"margin-top:6px", text:"Agent cost $" + r.cost_usd.toFixed(2)}));
+      box.appendChild(el("div", {class:"row"}, kids));
+    });
+  }
+
+  function copyBtn(text){
+    return el("button", {class:"btn secondary", type:"button", onclick:function(ev){
+      var b = ev.currentTarget;
+      try{ navigator.clipboard.writeText(text).then(function(){ b.textContent = "Copied"; }, function(){ b.textContent = "Select and copy"; }); }catch(e){ b.textContent = "Select and copy"; }
+    }, text:"Copy"});
+  }
+
+  function renderAdd(){
+    var sel = document.getElementById("f-segment");
+    if (sel.options.length !== S.segments.length + 1){
+      while (sel.options.length > 1) sel.remove(1);
+      S.segments.forEach(function(s){ sel.appendChild(el("option", {value:s.id, text:s.label})); });
+    }
+    document.getElementById("addBtn").disabled = !(S.mode === "local" || S.mode === "hosted");
+    var box = clear(document.getElementById("refresh"));
+    box.appendChild(el("h3", {text:"Run the agent again"}));
+    if (S.mode === "local"){
+      var segSel = el("select", {id:"r-seg", "aria-label":"Segment"}, S.segments.map(function(s){ return el("option", {value:s.id, text:s.label}); }));
+      var status = el("div", {class:"small", text: S.agentBusy ? "An agent run is going. This page updates when it finishes." : ""});
+      function start(body){
+        fetch("/api/runs", {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify(body)})
+          .then(function(r){ return r.json(); }).then(function(d){ if (d.error) status.textContent = d.error; else { S.agentBusy = true; status.textContent = "Started. Runs take a few minutes."; } });
+      }
+      box.appendChild(el("p", {class:"small", text:"Runs headless Claude Code with web search on this machine. Blind discovery never sees the seed list, so its recall is a fair test."}));
+      box.appendChild(el("div", {class:"actions"}, [segSel,
+        el("button", {class:"btn", type:"button", disabled:S.agentBusy ? true : null, onclick:function(){ start({mode:"discover", segment:segSel.value, blind:true}); }, text:"Discover (blind)"}),
+        el("button", {class:"btn secondary", type:"button", disabled:S.agentBusy ? true : null, onclick:function(){ start({mode:"enrich"}); }, text:"Enrich waiting companies"})]));
+      box.appendChild(status);
+    } else {
+      box.appendChild(el("p", {class:"small", text:"This page can't start the agent itself. Run these in the gtm-engine folder, then ask Claude Code to sync the shared map. Submissions you add here are merged on that sync."}));
+      ["bun run map enrich", "bun run map discover --segment spot_venues --blind", "bun run map export"].forEach(function(cmd){
+        box.appendChild(el("div", {class:"cmd"}, [el("code", {text:cmd}), copyBtn(cmd)]));
+      });
+    }
+  }
+
+  function renderFooter(){
+    var f = clear(document.getElementById("footer"));
+    if (!S.seed) return;
+    f.append("Seed: ", link(S.seed.post_url, S.seed.title), " (" + S.seed.publisher + "), by " + S.seed.author + ". Upstream: " + (S.seed.upstream || []).join("; ") + ". Roles are hypotheses relative to " + (S.company ? S.company.name : "your company") + " until you confirm them.");
+  }
+
+  function renderTabs(){
+    document.querySelectorAll("nav.tabs button").forEach(function(b){
+      var on = b.getAttribute("data-tab") === S.tab;
+      b.setAttribute("aria-selected", String(on));
+      document.getElementById("tab-" + b.getAttribute("data-tab")).hidden = !on;
+    });
+  }
+
+  function render(){
+    renderHeader(); renderStats(); renderTabs(); renderFilters(); renderMap(); renderReview(); renderRuns(); renderAdd(); renderFooter();
+    if (S.open) renderSheet();
+  }
+
+  /* ---------- events ---------- */
+  document.querySelectorAll("nav.tabs button").forEach(function(b){
+    b.addEventListener("click", function(){ S.tab = b.getAttribute("data-tab"); try{ localStorage.setItem("mm-tab", S.tab); }catch(e){} renderTabs(); });
+  });
+  var qt;
+  document.getElementById("q").addEventListener("input", function(e){ clearTimeout(qt); qt = setTimeout(function(){ S.q = e.target.value.trim(); renderMap(); }, 120); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && S.open){ S.open = null; clear(document.getElementById("sheetRoot")); } });
+
+  document.getElementById("addForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var body = { name: document.getElementById("f-name").value.trim(), website: document.getElementById("f-website").value.trim() || null,
+                 handle: document.getElementById("f-handle").value.trim().replace(/^@/, "") || null, segment: document.getElementById("f-segment").value || null,
+                 note: document.getElementById("f-note").value.trim() || null };
+    var msg = document.getElementById("addMsg");
+    function show(text, err){ msg.hidden = false; msg.className = "notice" + (err ? " err" : ""); msg.textContent = text; }
+    if (!body.name) return show("Give the company a name.", true);
+    var done = function(text){ show(text); e.target.reset(); };
+    if (S.mode === "local"){
+      fetch("/api/companies", {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify(body)}).then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d.error) return show(d.error, true);
+          var df = d.diff;
+          if (df.added.length) done(body.name + " is in the review queue. Enrich it to add it to the map.");
+          else if (df.ambiguous.length) show(body.name + " could be " + df.ambiguous[0].matches.join(" or ") + ". Add a website to tell them apart.", true);
+          else done(body.name + " is already in the map. Any new details were added to it.");
+          return S.reload();
+        }).catch(function(err){ show("Couldn't reach the engine: " + err.message, true); });
+    } else if (S.mode === "hosted" && S.db){
+      body.submitted_at = new Date().toISOString(); body.status = "new";
+      S.db.collection("submissions").doc().set(body).then(function(){ done(body.name + " is queued. The next sync merges it into the map."); })
+        .catch(function(err){ show(err && err.code === "invalid_argument" ? "You can view this map but not add to it." : "Couldn't save: " + ((err && err.message) || err), true); });
+    }
+  });
+
+  try{ var t = localStorage.getItem("mm-tab"); if (t && document.getElementById("tab-" + t)) S.tab = t; }catch(e){}
+  var h = (location.hash || "").slice(1); if (h && document.getElementById("tab-" + h)) S.tab = h;
+
+  render();
+  if (hasHost) startHosted(); else startLocal();
+})();
+</script>

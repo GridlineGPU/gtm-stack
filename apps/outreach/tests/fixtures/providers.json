@@ -1,0 +1,459 @@
+[
+  {
+    "region": "North America",
+    "companies": [
+      {
+        "name": "Corewell GPU",
+        "location": "United States",
+        "summary": "Corewell GPU rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "hello@corewell.example",
+          "support": "support@corewell.example",
+          "partner": "https://corewell.example/partners"
+        },
+        "people": [
+          {
+            "name": "Sam Rivera",
+            "search": "Sam Rivera Corewell GPU",
+            "url": "",
+            "bio": "VP Partnerships at Corewell GPU.",
+            "message": "Hi Sam,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Corewell GPU's idle compute?",
+            "role": "VP Partnerships"
+          },
+          {
+            "name": "Dana Lee",
+            "search": "Dana Lee Corewell GPU",
+            "url": "",
+            "bio": "CTO at Corewell GPU.",
+            "message": "Hi Dana,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Corewell GPU's idle compute?",
+            "role": "CTO"
+          }
+        ],
+        "notes": "",
+        "hook": "Corewell GPU recently added new GPU capacity.",
+        "source": {
+          "title": "Corewell GPU news",
+          "url": "https://corewell.example/news",
+          "publisher": "Corewell GPU"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Lumen Compute",
+        "location": "United States",
+        "summary": "Lumen Compute rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "sales@lumen.example",
+          "support": "",
+          "partner": "https://lumen.example/partners"
+        },
+        "people": [
+          {
+            "name": "Noor Haddad",
+            "search": "Noor Haddad Lumen Compute",
+            "url": "",
+            "bio": "Head of Sales at Lumen Compute.",
+            "message": "Hi Noor,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Lumen Compute's idle compute?",
+            "role": "Head of Sales"
+          }
+        ],
+        "notes": "",
+        "hook": "Lumen Compute recently added new GPU capacity.",
+        "source": {
+          "title": "Lumen Compute news",
+          "url": "https://lumen.example/news",
+          "publisher": "Lumen Compute"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Cascade Cloud",
+        "location": "United States",
+        "summary": "Cascade Cloud rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "info@cascadecloud.example",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Jordan Blake",
+            "search": "Jordan Blake Cascade Cloud",
+            "url": "",
+            "bio": "CEO at Cascade Cloud.",
+            "message": "Hi Jordan,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Cascade Cloud's idle compute?",
+            "role": "CEO"
+          }
+        ],
+        "notes": "",
+        "hook": "Cascade Cloud recently added new GPU capacity.",
+        "source": {
+          "title": "Cascade Cloud news",
+          "url": "https://cascadecloud.example/news",
+          "publisher": "Cascade Cloud"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Ion Harbor",
+        "location": "Canada",
+        "summary": "Ion Harbor rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "",
+          "support": "",
+          "partner": "https://ionharbor.example/partner-program"
+        },
+        "people": [
+          {
+            "name": "Mira Stone",
+            "search": "Mira Stone Ion Harbor",
+            "url": "",
+            "bio": "Chief Revenue Officer at Ion Harbor.",
+            "message": "Hi Mira,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Ion Harbor's idle compute?",
+            "role": "Chief Revenue Officer"
+          }
+        ],
+        "notes": "",
+        "hook": "Ion Harbor recently added new GPU capacity.",
+        "source": {
+          "title": "Ion Harbor news",
+          "url": "https://ionharbor.example/news",
+          "publisher": "Ion Harbor"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Podline",
+        "location": "United States",
+        "summary": "Podline rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "partners@podline.example",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Theo Park",
+            "search": "Theo Park Podline",
+            "url": "",
+            "bio": "Growth Lead at Podline.",
+            "message": "Hi Theo,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Podline's idle compute?",
+            "role": "Growth Lead"
+          }
+        ],
+        "notes": "",
+        "hook": "Podline recently added new GPU capacity.",
+        "source": {
+          "title": "Podline news",
+          "url": "https://podline.example/news",
+          "publisher": "Podline"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Hive HPC",
+        "location": "United States",
+        "summary": "Hive HPC rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "hello@hivehpc.example",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Ruth Okafor",
+            "search": "Ruth Okafor Hive HPC",
+            "url": "",
+            "bio": "COO at Hive HPC.",
+            "message": "Hi Ruth,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Hive HPC's idle compute?",
+            "role": "COO"
+          }
+        ],
+        "notes": "",
+        "hook": "Hive HPC recently added new GPU capacity.",
+        "source": {
+          "title": "Hive HPC news",
+          "url": "https://hivehpc.example/news",
+          "publisher": "Hive HPC"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      }
+    ]
+  },
+  {
+    "region": "Europe",
+    "companies": [
+      {
+        "name": "Nebula Racks",
+        "location": "Netherlands",
+        "summary": "Nebula Racks rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "hello@nebularacks.example",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Arno Jansen",
+            "search": "Arno Jansen Nebula Racks",
+            "url": "",
+            "bio": "Founder at Nebula Racks.",
+            "message": "Hi Arno,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Nebula Racks's idle compute?",
+            "role": "Founder"
+          }
+        ],
+        "notes": "",
+        "hook": "Nebula Racks recently added new GPU capacity.",
+        "source": {
+          "title": "Nebula Racks news",
+          "url": "https://nebularacks.example/news",
+          "publisher": "Nebula Racks"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Meridian Metal",
+        "location": "Germany",
+        "summary": "Meridian Metal rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "sales@meridianmetal.example",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Elena Vogel",
+            "search": "Elena Vogel Meridian Metal",
+            "url": "",
+            "bio": "Head of Partnerships at Meridian Metal.",
+            "message": "Hi Elena,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Meridian Metal's idle compute?",
+            "role": "Head of Partnerships"
+          }
+        ],
+        "notes": "",
+        "hook": "Meridian Metal recently added new GPU capacity.",
+        "source": {
+          "title": "Meridian Metal news",
+          "url": "https://meridianmetal.example/news",
+          "publisher": "Meridian Metal"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      }
+    ]
+  },
+  {
+    "region": "Asia",
+    "companies": [
+      {
+        "name": "Orbit Data Services",
+        "location": "India",
+        "summary": "Orbit Data Services rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "contact@orbitdata.example",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Kenji Mori",
+            "search": "Kenji Mori Orbit Data Services",
+            "url": "",
+            "bio": "Director, Cloud at Orbit Data Services.",
+            "message": "Hi Kenji,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Orbit Data Services's idle compute?",
+            "role": "Director, Cloud"
+          }
+        ],
+        "notes": "",
+        "hook": "Orbit Data Services recently added new GPU capacity.",
+        "source": {
+          "title": "Orbit Data Services news",
+          "url": "https://orbitdata.example/news",
+          "publisher": "Orbit Data Services"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Nimbus Grid",
+        "location": "India",
+        "summary": "Nimbus Grid rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "",
+          "support": "",
+          "partner": "https://nimbusgrid.example/partners"
+        },
+        "people": [
+          {
+            "name": "Rhea Kim",
+            "search": "Rhea Kim Nimbus Grid",
+            "url": "",
+            "bio": "VP Business Development at Nimbus Grid.",
+            "message": "Hi Rhea,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Nimbus Grid's idle compute?",
+            "role": "VP Business Development"
+          }
+        ],
+        "notes": "",
+        "hook": "Nimbus Grid recently added new GPU capacity.",
+        "source": {
+          "title": "Nimbus Grid news",
+          "url": "https://nimbusgrid.example/news",
+          "publisher": "Nimbus Grid"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Kumo Internet",
+        "location": "Japan",
+        "summary": "Kumo Internet rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "info@kumo-fixture.ad.jp",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Aiko Tanaka",
+            "search": "Aiko Tanaka Kumo Internet",
+            "url": "",
+            "bio": "Business Development at Kumo Internet.",
+            "message": "Hi Aiko,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Kumo Internet's idle compute?",
+            "role": "Business Development"
+          }
+        ],
+        "notes": "",
+        "hook": "Kumo Internet recently added new GPU capacity.",
+        "source": {
+          "title": "Kumo Internet news",
+          "url": "https://kumo-fixture.ad.jp/news",
+          "publisher": "Kumo Internet"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      },
+      {
+        "name": "Lantern IDC",
+        "location": "Vietnam",
+        "summary": "Lantern IDC rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "sales@lanternidc-fixture.com.vn",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Minh Tran",
+            "search": "Minh Tran Lantern IDC",
+            "url": "",
+            "bio": "Sales Director at Lantern IDC.",
+            "message": "Hi Minh,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Lantern IDC's idle compute?",
+            "role": "Sales Director"
+          }
+        ],
+        "notes": "",
+        "hook": "Lantern IDC recently added new GPU capacity.",
+        "source": {
+          "title": "Lantern IDC news",
+          "url": "https://lanternidc-fixture.com.vn/news",
+          "publisher": "Lantern IDC"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      }
+    ]
+  },
+  {
+    "region": "Oceania",
+    "companies": [
+      {
+        "name": "Tui Solutions",
+        "location": "New Zealand",
+        "summary": "Tui Solutions rents GPU capacity. Fictional test company.",
+        "judgment": "Route to partnerships first.",
+        "contacts": {
+          "email": "hello@tui-fixture.co.nz",
+          "support": "",
+          "partner": ""
+        },
+        "people": [
+          {
+            "name": "Hana Walker",
+            "search": "Hana Walker Tui Solutions",
+            "url": "",
+            "bio": "General Manager at Tui Solutions.",
+            "message": "Hi Hana,\n\nWe're building Gridline from Entrepreneurs First.\nGridline is the workload intelligence and orchestration layer for heterogeneous GPU compute.\n\nAre you open to a 15-min chat on how we can bring more customers to Tui Solutions's idle compute?",
+            "role": "General Manager"
+          }
+        ],
+        "notes": "",
+        "hook": "Tui Solutions recently added new GPU capacity.",
+        "source": {
+          "title": "Tui Solutions news",
+          "url": "https://tui-fixture.co.nz/news",
+          "publisher": "Tui Solutions"
+        },
+        "nvidia": {
+          "status": "Not found",
+          "note": "",
+          "url": ""
+        }
+      }
+    ]
+  }
+]

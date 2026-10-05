@@ -1,0 +1,106 @@
+[
+  {
+    "companyId": "nebularacks",
+    "company": "Nebula Racks",
+    "checkedAt": "2026-09-09T12:00:00.000Z",
+    "website": "https://nebularacks.example",
+    "pages": [
+      {
+        "url": "https://nebularacks.example/contact",
+        "status": 200
+      }
+    ],
+    "candidates": [
+      {
+        "address": "arno.jansen@nebularacks.example",
+        "source": "https://nebularacks.example/contact",
+        "kind": "person",
+        "contact": "Arno Jansen",
+        "checkedAt": "2026-09-09T12:00:00.000Z",
+        "excerpt": "Contact: arno.jansen@nebularacks.example"
+      },
+      {
+        "address": "hello@nebularacks.example",
+        "source": "https://nebularacks.example/contact",
+        "kind": "team",
+        "contact": "",
+        "checkedAt": "2026-09-09T12:00:00.000Z",
+        "excerpt": "Contact: hello@nebularacks.example"
+      }
+    ]
+  },
+  {
+    "companyId": "nimbusgrid",
+    "company": "Nimbus Grid",
+    "checkedAt": "2026-09-09T12:00:00.000Z",
+    "website": "https://nimbusgrid.example",
+    "pages": [
+      {
+        "url": "https://nimbusgrid.example/contact",
+        "status": 200
+      }
+    ],
+    "candidates": [
+      {
+        "address": "partners@nimbusgrid.example",
+        "source": "https://nimbusgrid.example/contact",
+        "kind": "team",
+        "contact": "",
+        "checkedAt": "2026-09-09T12:00:00.000Z",
+        "excerpt": "Contact: partners@nimbusgrid.example"
+      },
+      {
+        "address": "info@nimbusgrid.example",
+        "source": "https://nimbusgrid.example/contact",
+        "kind": "team",
+        "contact": "",
+        "checkedAt": "2026-09-09T12:00:00.000Z",
+        "excerpt": "Contact: info@nimbusgrid.example"
+      }
+    ]
+  },
+  {
+    "companyId": "corewellgpu",
+    "company": "Corewell GPU",
+    "checkedAt": "2026-09-09T12:00:00.000Z",
+    "website": "https://corewell.example",
+    "pages": [
+      {
+        "url": "https://corewell.example/contact",
+        "status": 200
+      }
+    ],
+    "candidates": [
+      {
+        "address": "sales@corewell.example",
+        "source": "https://corewell.example/contact",
+        "kind": "team",
+        "contact": "",
+        "checkedAt": "2026-09-09T12:00:00.000Z",
+        "excerpt": "Contact: sales@corewell.example"
+      }
+    ]
+  },
+  {
+    "companyId": "kumointernet",
+    "company": "Kumo Internet",
+    "checkedAt": "2026-09-09T12:00:00.000Z",
+    "website": "https://kumo-fixture.ad.jp",
+    "pages": [
+      {
+        "url": "https://kumo-fixture.ad.jp/contact",
+        "status": 200
+      }
+    ],
+    "candidates": [
+      {
+        "address": "info@kumo-fixture.ad.jp",
+        "source": "https://kumo-fixture.ad.jp/contact",
+        "kind": "team",
+        "contact": "",
+        "checkedAt": "2026-09-09T12:00:00.000Z",
+        "excerpt": "Contact: info@kumo-fixture.ad.jp"
+      }
+    ]
+  }
+]

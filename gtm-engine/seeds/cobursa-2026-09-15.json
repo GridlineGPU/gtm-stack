@@ -1,0 +1,118 @@
+{
+  "id": "cobursa-2026-09-15",
+  "title": "Compute Markets Map, September 2026, first version",
+  "publisher": "Cobursa (www.cobursa.com)",
+  "author": "Stani Korostelev (@AmusingVentures)",
+  "post_url": "https://x.com/AmusingVentures/status/2099863926489911469",
+  "image_url": "https://pbs.twimg.com/media/HSQ255IW4AAYiiO.jpg?name=orig",
+  "published": "2026-09-15",
+  "checked": "2026-09-15",
+  "scope": "Indices, venues, desks, exchanges, credit and insurance around the GPU-hour. Not the clouds themselves.",
+  "upstream": [
+    "Social Graph Ventures, \"A Primer on Compute Markets\" (2 Sep 2026)",
+    "@0xfishylosopher essay"
+  ],
+  "note": "Transcribed by hand from the map image. Handles are as printed. Not exhaustive per the author.",
+  "segments": [
+    {
+      "id": "price_discovery",
+      "label": "Price discovery: indices and data",
+      "companies": [
+        { "name": "Silicon Data", "handle": "Silicon_Data" },
+        { "name": "Ornn", "handle": "OrnnExchange" },
+        { "name": "Compute Desk", "handle": "ComputeDesk" },
+        { "name": "NATIVX", "handle": null },
+        { "name": "SemiAnalysis", "handle": "SemiAnalysis_" }
+      ]
+    },
+    {
+      "id": "spot_venues",
+      "label": "Spot venues, auctions and aggregators",
+      "companies": [
+        { "name": "SF Compute", "handle": "sfcompute" },
+        { "name": "Compute Exchange", "handle": "computeexchange" },
+        { "name": "Computable", "handle": "getcomputable" },
+        { "name": "Stoa", "handle": "stoaexchange" },
+        { "name": "Mithril", "handle": "mithrilcompute" },
+        { "name": "Shadeform", "handle": "shadeformai" },
+        { "name": "Hydra Host", "handle": "get_hydrahost", "aliases": ["Hydra"] },
+        { "name": "NVIDIA Lepton", "handle": null, "aliases": ["DGX Cloud Lepton", "NVIDIA DGX Cloud Lepton"] },
+        { "name": "RunPod", "handle": "runpod" },
+        { "name": "Vast.ai", "handle": "vast_ai" },
+        { "name": "TensorDock", "handle": "TensorDock" },
+        { "name": "Salad", "handle": "SaladTech" },
+        { "name": "Clore.ai", "handle": "clore_ai", "aliases": ["Clore"] }
+      ]
+    },
+    {
+      "id": "decentralised",
+      "label": "Decentralised compute networks",
+      "companies": [
+        { "name": "Akash", "handle": "akashnet" },
+        { "name": "io.net", "handle": "ionet" },
+        { "name": "Aethir", "handle": "AethirCloud" },
+        { "name": "Render", "handle": "rendernetwork" },
+        { "name": "Nosana", "handle": "nosana_ai" },
+        { "name": "Spheron", "handle": "spheron" },
+        { "name": "Fluence", "handle": "fluence_project" },
+        { "name": "Golem", "handle": "golemproject" },
+        { "name": "Theta EdgeCloud", "handle": "Theta_Network" },
+        { "name": "Aleph Cloud", "handle": "aleph_im" },
+        { "name": "Hyperbolic", "handle": "hyperbolic_labs" },
+        { "name": "Prime Intellect", "handle": "PrimeIntellect" },
+        { "name": "Gensyn", "handle": "GensynAI" },
+        { "name": "Lium", "handle": "lium_io" },
+        { "name": "Targon", "handle": "TargonCompute" }
+      ]
+    },
+    {
+      "id": "desks_brokers",
+      "label": "Desks and brokers (OTC)",
+      "companies": [
+        { "name": "Itô Markets", "handle": "itomarkets" },
+        { "name": "Anera", "handle": "intheanera" },
+        { "name": "BGC CIM", "handle": "BGCGroupInc", "aliases": ["BGC Group"] },
+        { "name": "FalconX", "handle": "FalconXGlobal" }
+      ]
+    },
+    {
+      "id": "exchanges",
+      "label": "Exchanges, futures, perps and prediction markets",
+      "companies": [
+        { "name": "CME Group", "handle": "CMEGroup", "aliases": ["CME"] },
+        { "name": "ICE", "handle": "ICE_Markets", "aliases": ["Intercontinental Exchange"] },
+        { "name": "Nodal Exchange", "handle": "NodalExchange", "aliases": ["Nodal"] },
+        { "name": "Architect", "handle": "Architect_Fi" },
+        { "name": "Liquid Compute", "handle": "liquidcompute" },
+        { "name": "MNX", "handle": "MNX_fi" },
+        { "name": "Hyperliquid", "handle": "HyperliquidX" },
+        { "name": "Kalshi", "handle": "Kalshi" },
+        { "name": "Polymarket", "handle": "Polymarket" },
+        { "name": "Castle", "handle": "castle_tech_" }
+      ]
+    },
+    {
+      "id": "credit",
+      "label": "Credit and financing",
+      "companies": [
+        { "name": "USD.AI", "handle": "USDai_Official", "aliases": ["USDai"] },
+        { "name": "GAIB", "handle": "gaib_ai" },
+        { "name": "Compute Labs", "handle": "Compute_Labs" },
+        { "name": "Cysic", "handle": "cysic_xyz" },
+        { "name": "GPU Financing", "handle": "gpufinancing" }
+      ]
+    },
+    {
+      "id": "insurance_plumbing",
+      "label": "Insurance, collateral and plumbing",
+      "companies": [
+        { "name": "Forward Compute", "handle": null },
+        { "name": "American Compute", "handle": "amcompute1" },
+        { "name": "PRINCEPS", "handle": "PRINCEPSdev" },
+        { "name": "Barkr", "handle": null },
+        { "name": "Aravolta", "handle": "Aravolta_X25" },
+        { "name": "Internet Backyard", "handle": "netbackyard" }
+      ]
+    }
+  ]
+}

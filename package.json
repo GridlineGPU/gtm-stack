@@ -1,0 +1,21 @@
+{
+  "name": "gtm-stack",
+  "private": true,
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "type": "module",
+  "packageManager": "bun@1.3.14",
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "bun run --cwd apps/outreach dev",
+    "start": "bun run --cwd apps/outreach start",
+    "build": "bun run --cwd apps/outreach build",
+    "test": "bun run --cwd apps/outreach test && bun run --cwd gtm-engine test",
+    "typecheck": "bun run --cwd apps/outreach typecheck && bun run --cwd gtm-engine typecheck",
+    "lint": "biome check apps/outreach",
+    "engine:install": "bun install --cwd gtm-engine --frozen-lockfile",
+    "map": "bun run --cwd gtm-engine map",
+    "funnel": "bun run --cwd gtm-engine funnel",
+    "serve:engine": "bun run --cwd gtm-engine serve"
+  },
+  "devDependencies": { "@biomejs/biome": "2.5.5" }
+}

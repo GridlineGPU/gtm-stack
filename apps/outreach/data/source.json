@@ -1,0 +1,33 @@
+{
+  "version": "demo-fixtures",
+  "files": {
+    "providers": "../tests/fixtures/providers.json",
+    "sheet": "../tests/fixtures/sheet.json",
+    "sheetLatest": "../tests/fixtures/sheet-latest.json",
+    "curated": "../tests/fixtures/curated-companies.json",
+    "emailResearch": "../tests/fixtures/email-research.json",
+    "samples": "../tests/fixtures/samples.json"
+  },
+  "sheetUrl": "https://sheets.example/tracker/edit",
+  "artifactUrl": "https://research.example/providers",
+  "aliases": {
+    "Orbit AI": "Orbit Data Services"
+  },
+  "knownPriorContact": ["lumencompute", "corewellgpu", "cascadecloud"],
+  "curated": {
+    "draft": [
+      {
+        "id": "glowhive",
+        "domain": "glowhive.example"
+      }
+    ],
+    "park": [
+      {
+        "id": "pitwallai",
+        "domain": "pitwall.example",
+        "reason": "Research blocked: operating company and contact could not be verified."
+      }
+    ]
+  },
+  "domainRepairs": {}
+}

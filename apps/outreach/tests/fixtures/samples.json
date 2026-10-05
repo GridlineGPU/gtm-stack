@@ -1,0 +1,32 @@
+[
+  {
+    "company": "Ion Harbor",
+    "domain": "ionharbor.example",
+    "contact": "Mira Stone",
+    "role": "Chief Revenue Officer",
+    "hook": "Your white-label GPU partner program looks relevant to offering Ion Harbor through Gridline.",
+    "source": "https://ionharbor.example/partner-program",
+    "linkedin": "https://www.linkedin.com/in/fixture-mira-stone/",
+    "program": "https://ionharbor.example/partner-program"
+  },
+  {
+    "company": "Podline",
+    "domain": "podline.example",
+    "contact": "Theo Park",
+    "role": "Growth · confirm partnership routing",
+    "hook": "Your integration partner track looks relevant to helping shared users manage GPU workloads.",
+    "source": "https://podline.example/partners",
+    "linkedin": "https://www.linkedin.com/in/fixture-theo-park/",
+    "program": "https://podline.example/partners"
+  },
+  {
+    "company": "Hive HPC",
+    "domain": "hivehpc.example",
+    "contact": "Ruth Okafor",
+    "role": "COO",
+    "hook": "Your bare-metal offering looks relevant to a small provider integration.",
+    "source": "https://hivehpc.example/about",
+    "linkedin": "",
+    "program": ""
+  }
+]

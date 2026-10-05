@@ -1,0 +1,76 @@
+[
+  {
+    "id": "glowhive",
+    "name": "Glowhive",
+    "sheetName": "Glowhive",
+    "region": "Asia",
+    "location": "",
+    "poc": "Asha Rao",
+    "owner": "Akshit",
+    "salesStatus": "Prospecting",
+    "partnerStatus": "",
+    "ncp": "No",
+    "nextStep": "",
+    "followUp": "",
+    "notes": "",
+    "revision": 1,
+    "summary": "Glowhive. Fictional curated company.",
+    "hook": "a GPU cluster for regional startups",
+    "routing": "",
+    "routes": {
+      "email": "",
+      "partner": "",
+      "product": "",
+      "exec": ""
+    },
+    "story": "https://glowhive.example/about",
+    "artifactSource": "",
+    "sheetSource": "",
+    "sheetRow": 0,
+    "sheetValues": {},
+    "people": [
+      {
+        "id": "glowhive-0",
+        "name": "Asha Rao",
+        "role": "Founder",
+        "bio": "Founder",
+        "profile": "",
+        "referenceDraft": "",
+        "source": "research"
+      }
+    ],
+    "knownPriorContact": false
+  },
+  {
+    "id": "pitwallai",
+    "name": "Pitwall AI",
+    "sheetName": "Pitwall AI",
+    "region": "Europe",
+    "location": "",
+    "poc": "",
+    "owner": "Akshit",
+    "salesStatus": "Prospecting",
+    "partnerStatus": "",
+    "ncp": "No",
+    "nextStep": "",
+    "followUp": "",
+    "notes": "",
+    "revision": 1,
+    "summary": "Pitwall AI. Fictional curated company.",
+    "hook": "motorsport telemetry models",
+    "routing": "",
+    "routes": {
+      "email": "",
+      "partner": "",
+      "product": "",
+      "exec": ""
+    },
+    "story": "https://pitwallai.example/about",
+    "artifactSource": "",
+    "sheetSource": "",
+    "sheetRow": 0,
+    "sheetValues": {},
+    "people": [],
+    "knownPriorContact": false
+  }
+]

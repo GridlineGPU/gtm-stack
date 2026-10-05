@@ -1,0 +1,19 @@
+[
+  {
+    "id": "example-partner",
+    "name": "Example partner application (replace with inspected form)",
+    "url": "https://partners.example.com/apply",
+    "allowedHosts": ["partners.example.com"],
+    "expectedFormText": "Exact normalized visible text of the inspected form, including labels and terms.",
+    "terms": "Exact terms/consent text reviewed with this application. Do not substitute a summary for a required consent.",
+    "fields": [
+      { "label": "Full name", "selector": "#full-name", "type": "text" },
+      { "label": "Business name", "selector": "#company", "type": "text" },
+      { "label": "Email", "selector": "#email", "type": "text" },
+      { "label": "Message", "selector": "#message", "type": "text" },
+      { "label": "Accept terms (yes/no)", "selector": "#terms", "type": "checkbox" }
+    ],
+    "submitSelector": "#partner-form button[type=submit]",
+    "successSelector": "#application-confirmed"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "company": "Gridline",
+  "one_liner": "The OpenRouter for GPUs: one interface that aggregates and routes GPU capacity across providers.",
+  "context_file": "config/product-marketing.md",
+  "home_segment": "spot_venues",
+  "roles": {
+    "competitor": "Sells the same job to the same buyer: one buying or routing surface over many GPU providers.",
+    "supplier": "Has GPU capacity Gridline could route to.",
+    "partner": "Complements Gridline: data, settlement, financing or metering it could plug into.",
+    "adjacent": "Builds market structure around the GPU-hour but doesn't sell compute access to Gridline's buyers.",
+    "buyer": "Would buy GPU capacity through Gridline."
+  },
+  "default_role_by_segment": {
+    "price_discovery": "partner",
+    "spot_venues": "competitor",
+    "decentralised": "supplier",
+    "desks_brokers": "adjacent",
+    "exchanges": "adjacent",
+    "credit": "adjacent",
+    "insurance_plumbing": "partner"
+  },
+  "role_overrides": {
+    "runpod": "supplier",
+    "vast-ai": "supplier",
+    "tensordock": "supplier",
+    "salad": "supplier",
+    "clore-ai": "supplier",
+    "semianalysis": "adjacent",
+    "ito-markets": "competitor",
+    "prime-intellect": "adjacent",
+    "gensyn": "adjacent"
+  },
+  "extra_segments": [
+    { "id": "token_routers", "label": "Model and token routers", "note": "Not on the Cobursa map. OpenRouter (now Stripe) sits here." }
+  ]
+}

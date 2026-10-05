@@ -1,0 +1,15 @@
+.claude/settings.local.json
+node_modules/
+dist/
+.env
+.env.*
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+__pycache__/
+apps/outreach/.data/
+.DS_Store
+
+# Real Studio source data stays local; only the demo config is tracked.
+apps/outreach/data/*
+!apps/outreach/data/source.json
